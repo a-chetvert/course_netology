@@ -1,20 +1,16 @@
 /**
- * @brief ���� � ����� �����
- * @note  Please, reopen with Encoding Cyrilic(Windows-1251)
+ * @brief Повторение числа.
+ * @note  https://github.com/netology-code/cpps-homeworks/tree/main/1.2/01
  */
-#include <Windows.h>
 #include <iostream>
 
 using namespace std;
 
 int main() {
-  string number;
-  SetConsoleOutputCP(1251);   // ��������� ������� �������� win-cp 1251 � �����
-                              // ������ char string[20];
-  cout << "������� �����:" << endl;  // ����� ������
-
-  cin >> number;  // ������ ������, ��������� ���������
-  cout << "�� �����:\n" << number << endl;  // ����� ������
+  int number;
+  cout << "Введите число:" << endl;
+  cin >> number;
+  cout << "Вы ввели:\n" << number << endl;
 
   return 0;
 }
