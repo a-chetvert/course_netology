@@ -8,13 +8,15 @@
 using namespace std;
 
 int main() {
-  string number;
+  string word;
+
+  SetConsoleCP(1251);         // ��������� ������� �������� win-cp 1251 � ����� �����
   SetConsoleOutputCP(1251);   // ��������� ������� �������� win-cp 1251 � �����
                               // ������ char string[20];
   cout << "������� �����:" << endl;  // ����� ������
 
-  cin >> number;  // ������ ������, ��������� ���������
-  cout << "�� �����:\n" << number << endl;  // ����� ������
+  cin >> word;  // ������ ������, ��������� ���������
+  cout << "�� �����:\n" << word << endl;  // ����� ������
 
   return 0;
 }
