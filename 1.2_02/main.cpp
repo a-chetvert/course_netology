@@ -1,29 +1,37 @@
-/**
- * @brief Повторение слова.
- * @note  https://github.com/netology-code/cpps-homeworks/tree/main/1.2/02
- * 
- * @warning при использовании в VSCODE
- * cin не принимает кириллицу без setlocale()
- */
-#include <iostream>
+//варианты решения для кодировок
+ #define VARIANT_CP        //< @brief как в презентации
+// #define VARIANT_LOCALE_0  //< @brief как в презентации
+ //#define VARIANT_LOCALE_1
+// #define VARIANT_LOCALE_2
 
-//#define VSCODE 
-#ifdef VSCODE
-  #include <Windows.h>
-#endif
+#include <iostream>
+#include <Windows.h>
+#ifdef VARIANT_LOCALE_0 || VARIANT_LOCALE_1 || VARIANT_LOCALE_2
+  #include <locale>
+  #endif
 
 using namespace std;
 
 int main() {
-  string word;
+string sex;
 
-#ifdef VSCODE  
-  setlocale(LC_CTYPE, "rus");
+#ifdef VARIANT_CP
+  SetConsoleCP(1251);
+  SetConsoleOutputCP(1251);
 #endif  
-
-  cout << "Введите слово:" << endl;
-  cin >> word;
-  cout << "Вы ввели:\n" << word << endl;
+#ifdef VARIANT_LOCALE_0  
+  setlocale(LC_CTYPE, "rus"); // как в презентации
+#endif  
+#ifdef VARIANT_LOCALE_1
+  setlocale(LC_ALL, "ru_RU.UTF-8");
+#endif
+#ifdef VARIANT_LOCALE_2
+  setlocale(LC_ALL, "Russian");
+#endif
+    
+  cout << "Введите пол:" << endl;
+  cin >> sex;
+  cout << "Ваш пол:\n" << sex << endl;
 
   return 0;
 }

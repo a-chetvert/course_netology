@@ -1,14 +1,15 @@
 /**
- * @brief Р—Р°РґР°РЅРёРµ 3*. Р“РѕСЂРѕСЃРєРѕРї.
+ * @brief Задание 3*. Гороскоп.
  * @note  https://github.com/netology-code/cpps-homeworks/tree/main/1.3/03
- * @warning РїСЂРё РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРё РІ VSCODE
- * cin РЅРµ РїСЂРёРЅРёРјР°РµС‚ РєРёСЂРёР»Р»РёС†Сѓ Р±РµР· setlocale()* 
+ * @warning Please, reopen with Cyrilic(Windows1251)
  */
 #include <iostream>
 
+#define NUM_ZODIAC 3
 #define VSCODE 
 #ifdef VSCODE
   #include <Windows.h>
+  #include <locale.h>
 #endif
 
 using namespace std;
@@ -16,50 +17,50 @@ using namespace std;
 int main() {
 
 #ifdef VSCODE
-  //SetConsoleOutputCP(1251);
-  setlocale(LC_ALL, "rus");
+  SetConsoleCP(1251);
+  SetConsoleOutputCP(1251);
 #endif    
 
   char sex {0};
   int age {0};
   string zodiac;
-  bool isWaterSign{false};
-
-  cout << "Р’РІРµРґРёС‚Рµ РїРѕР»: ";
+  string zodiacWater[NUM_ZODIAC]={"рак", "скорпион","рыбы"};
+  string zodiacEarth[NUM_ZODIAC]={"телец", "дева","козерог"};
+  
+  cout << "Введите пол: ";
   cin >> sex;
-  
-  cout << "\nsex: " << sex << endl;
 
-
-  wcout << "Р’РІРµРґРёС‚Рµ Р·РЅР°Рє Р·РѕРґРёР°РєР°: ";
+  cout << "Введите знак зодиака: ";
   cin >> zodiac;
-  
-  cout << "\nzodiac: " << zodiac << endl;
 
-  wcout << "Р’РІРµРґРёС‚Рµ РІРѕР·СЂР°СЃС‚: ";
+  cout << "Введите возраст: ";
   cin >> age;
 
-  cout << "\nage: " << age << endl;
+  cout << "Ваше предсказание:" << endl;
 
+  switch (sex)
+  {
+  case 'м':
+    if((age < 40) && (zodiac == zodiacWater[0] || zodiac == zodiacWater[1] || zodiac == zodiacWater[2])){
+      cout << "Сегодня очень плодотворный день. Можно добиться того, что прежде казалось почти невозможным.\n";
+    }
+    else 
+      cout << "Гороскоп для вас находится в разработке. Приходите чуточку позже ;)";
+    break;
+  
+  case 'ж':
+    if((age >= 15)&&(age <= 30) && (zodiac == zodiacEarth[0] || zodiac == zodiacEarth[1] || zodiac == zodiacEarth[2])){
+      cout << "Сегодняшний вечер подходит для общения с друзьями, проведения домашних праздников и импровизированных вечеринок.";
+      cout << "\nБудет не только весело, но и интересно: найдётся дело, которое увлечёт всех.";
+    }
+    else 
+      cout << "Гороскоп для вас находится в разработке. Приходите чуточку позже ;)";
+    break;
 
-
-
-/*   cout << "Р’РІРµРґРёС‚Рµ РІС‚РѕСЂРѕРµ С‡РёСЃР»Рѕ: ";
-  cin >> num[1];
-  cout << "Р’РІРµРґРёС‚Рµ С‚СЂРµС‚СЊРµ С‡РёСЃР»Рѕ: ";
-  cin >> num[2];
-
-  max = (num[0] >= num[1]) ? ((num[0] >= num[2]) ? num[0] : num[2])
-                           : ((num[1] >= num[2]) ? num[1] : num[2]);
-
-  min = (num[0] <= num[1]) ? ((num[0] <= num[2])   ? num[0]
-                              : (num[1] <= num[2]) ? num[1]
-                                                   : num[2])
-                           : ((num[1] <= num[2]) ? num[1] : num[0]);
-
-  midd = num[0] + num[1] + num[2] - min - max;
-
-  cout << "\nР РµР·СѓР»СЊС‚Р°С‚: " << max << " " << midd << " " << min; */
-
+  default:
+    cout << "Гороскоп для вас находится в разработке. Приходите чуточку позже ;)";
+    break;
+  }
+  
   return 0;
 }
