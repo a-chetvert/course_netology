@@ -62,5 +62,5 @@ int main() {
     break;
   }
   
-  return 0;
+  return EXIT_SUCCESS;
 }
