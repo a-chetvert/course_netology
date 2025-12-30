@@ -35,9 +35,12 @@ int main() {
     {
     std::cout << "Не получилось открыть файл!" << std::endl;
     }
-    
+
     revert_print_two_dim_array(arrFromFile, numRow, numCols);
     
+    for(int i = 0; i<numRow; i++){
+        delete [] arrFromFile[i];
+    }
     delete [] arrFromFile;
     return EXIT_SUCCESS;
 }
