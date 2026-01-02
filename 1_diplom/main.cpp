@@ -1,28 +1,29 @@
 /**
  * @brief Курсовой проект «Игра "Жизнь"»
  * @note  https://github.com/netology-code/cpps-diplom
- * 
- * @todo 
+ *
+ * @todo
  * - добавить доп проверки при чтении точек
  * - проверить работу на нечетном количестве точек
  * - разбить readState() на несколько функций (слишком большая функция)
  * - подтянуть адекватный clang-format
  * - добавить функцию вывода для отладки
  */
-#include <iostream>
-#include <fstream>
+#include <unistd.h>  // для sleep()
+
 #include <cstdlib>  // для system("clear")
-#include <unistd.h> // для sleep()
+#include <fstream>
+#include <iostream>
 
 /// @brief макрос для отладки
-// #define DEBUG
+ #define DEBUG
 
 // прототипы функций
 void print_two_dim_array(unsigned** arr, unsigned rows, unsigned cols);
 void delArr(unsigned**& arrToDel, unsigned numRow);
 void readState(unsigned**& arr, unsigned& inRows, unsigned& inCols,
                unsigned& count);
-// void printArea(unsigned**& arrToDel, unsigned rows, unsigned cols);
+void printArea(unsigned**& arr, unsigned rows, unsigned cols);
 
 int main() {
   unsigned rows{0}, cols{0}, points{0};
@@ -33,7 +34,7 @@ int main() {
   std::cout << "Debug: Считанный массив " << std::endl;
   print_two_dim_array(localArr, points, 2);
 #endif
-
+  printArea(localArr, rows, cols);
   delArr(localArr, points);
 
   return EXIT_SUCCESS;
@@ -85,7 +86,7 @@ void delArr(unsigned**& arrToDel, unsigned numRow) {
  * @param[out] inRows Количество строк игрового поля.
  * @param[out] inCols Количество столбцов игрового поля.
  * @param[out] count Количество живых клеток.
- * 
+ *
  * @note
  * Функция считывает размеры поля и координаты живых клеток из текстового файла.
  * Формат файла:
@@ -145,7 +146,22 @@ void readState(unsigned**& arr, unsigned& inRows, unsigned& inCols,
   }
 }
 
+/**
+ * @brief функция, отображающая поле
+ * 
+ * @todo разобраться с очисткой терминала при отображении
+ */
+void printArea(unsigned**& arr, unsigned rows, unsigned cols) {
+       
+#ifdef DEBUG
+    std::cout << "rows " << rows << std::endl;
+    std::cout << "cols " << cols << std::endl;
+#endif
 
-// void printArea(unsigned**& arrToDel, unsigned rows, unsigned cols){
-
-// }
+  for (unsigned i{0}; i < rows; i++) {
+    for (unsigned j{0}; j < cols; j++) {
+      std::cout << "- ";
+    }
+    std::cout << std::endl;
+  }
+}
