@@ -9,7 +9,8 @@
             "stopAtEntry": false,
             "cwd": "${fileDirname}", //C:/msys64/ucrt64/bin",
             "environment": [],
-            "externalConsole": false,
+            "externalConsole": false,  // Используем встроенный терминал VS Code
+            "console": "integratedTerminal",  // Явно указываем терминал
             "MIMode": "gdb",
             "miDebuggerPath": "C:\\msys64\\ucrt64\\bin\\gdb.exe",
             "setupCommands": [

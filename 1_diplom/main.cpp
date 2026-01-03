@@ -8,6 +8,9 @@
  * - разбить readState() на несколько функций (слишком большая функция)
  * - подтянуть адекватный clang-format
  * - добавить функцию вывода для отладки
+ * 
+ * @ask
+ * - не работает system("cls") и ("clear")
  */
 #include <unistd.h>  // для sleep()
 
@@ -16,14 +19,14 @@
 #include <iostream>
 
 /// @brief макрос для отладки
- #define DEBUG
+//#define DEBUG
 
 // прототипы функций
 void print_two_dim_array(unsigned** arr, unsigned rows, unsigned cols);
 void delArr(unsigned**& arrToDel, unsigned numRow);
 void readState(unsigned**& arr, unsigned& inRows, unsigned& inCols,
                unsigned& count);
-void printArea(unsigned**& arr, unsigned rows, unsigned cols);
+void printArea(unsigned**& arr, unsigned rows, unsigned cols, unsigned numPoints);
 
 int main() {
   unsigned rows{0}, cols{0}, points{0};
@@ -34,7 +37,7 @@ int main() {
   std::cout << "Debug: Считанный массив " << std::endl;
   print_two_dim_array(localArr, points, 2);
 #endif
-  printArea(localArr, rows, cols);
+  printArea(localArr, rows, cols, points);
   delArr(localArr, points);
 
   return EXIT_SUCCESS;
@@ -146,21 +149,34 @@ void readState(unsigned**& arr, unsigned& inRows, unsigned& inCols,
   }
 }
 
+    #include <windows.h>
+    
+
 /**
  * @brief функция, отображающая поле
- * 
+ *
  * @todo разобраться с очисткой терминала при отображении
  */
-void printArea(unsigned**& arr, unsigned rows, unsigned cols) {
-       
+void printArea(unsigned**& arr, unsigned rows, unsigned cols, unsigned numPoints) {
+  // использую последовательность, т.к. system("cls") ("clear")
+  // не работают
+  std::cout << "\033[2J\033[1;1H";    
 #ifdef DEBUG
-    std::cout << "rows " << rows << std::endl;
-    std::cout << "cols " << cols << std::endl;
 #endif
+  std::cout << "rows " << rows << std::endl;
+  std::cout << "cols " << cols << std::endl;
 
   for (unsigned i{0}; i < rows; i++) {
     for (unsigned j{0}; j < cols; j++) {
-      std::cout << "- ";
+      bool flag{0};
+      for(unsigned k{0}; k< numPoints; k++){
+        if(arr[k][0]==i && arr[k][1] == j){
+          std::cout << "* ";    
+          flag = 1;
+        }
+      }
+      if(flag == 0)
+        std::cout << "- ";
     }
     std::cout << std::endl;
   }
