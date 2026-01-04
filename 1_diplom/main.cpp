@@ -8,38 +8,70 @@
  * - разбить readState() на несколько функций (слишком большая функция)
  * - подтянуть адекватный clang-format
  * - добавить функцию вывода для отладки
- * 
+ * - проверку на наличие клеток в файле (если их нет - вывести пустоеполе)
+ *
  * @ask
  * - не работает system("cls") и ("clear")
  */
 #include <unistd.h>  // для sleep()
 
-#include <cstdlib>  // для system("clear")
+#include <cstdlib>  // для system("clear"), system("cls")
 #include <fstream>
 #include <iostream>
 
 /// @brief макрос для отладки
-//#define DEBUG
+// #define DEBUG
+
+/// @defgroup выбор формата очистки поля
+#define CLEAR_BARE_ENTER 0  ///< @brief заполнение пустыми строками
+#define CLEAR_CLS 0         ///< @brief использование функции system("cls")
+#define CLEAR_CLEAR 0       ///< @brief использование функции system("clear")
+#define CLEAR_ANSI 0        ///< @brief управляющая последовательность ANSI
+
+/// @brief выбор формата очистки поля
+#define CLEAR_AREA_STYLE CLEAR_BARE_ENTER
 
 // прототипы функций
 void print_two_dim_array(unsigned** arr, unsigned rows, unsigned cols);
 void delArr(unsigned**& arrToDel, unsigned numRow);
 void readState(unsigned**& arr, unsigned& inRows, unsigned& inCols,
                unsigned& count);
-void printArea(unsigned**& arr, unsigned rows, unsigned cols, unsigned numPoints);
+void clearScreen();
+void printArea(unsigned**& arr, unsigned rows, unsigned cols,
+               unsigned numPoints);
+void printResult(unsigned generation, unsigned livingCells);
+unsigned countNeighbors(unsigned**& arr, unsigned* point, unsigned rows,
+                        unsigned cols);
+// void updateArea();
 
 int main() {
-  unsigned rows{0}, cols{0}, points{0};
-  unsigned** localArr{nullptr};
-  readState(localArr, rows, cols, points);
+  unsigned generation{1},           // номер поколения
+      rows{0},                      // размер поля по вертикали
+      cols{0},                      // размер поля по горизонтали
+      livingCells{0},               // текущее количество живых клеток
+      prevLivingCells{0},           // предыдущее количество живых клеток
+      **arrLiveCells{nullptr},      // массив позиций живых клеток
+      **prevArrLiveCells{nullptr};  // массив предыдущих позиций живых клеток
 
+  readState(arrLiveCells, rows, cols, livingCells);
 #ifdef DEBUG
   std::cout << "Debug: Считанный массив " << std::endl;
-  print_two_dim_array(localArr, points, 2);
+  print_two_dim_array(arrLiveCells, points, 2);
 #endif
-  printArea(localArr, rows, cols, points);
-  delArr(localArr, points);
+  printArea(arrLiveCells, rows, cols, livingCells);
+  printResult(generation, livingCells);
 
+  for (size_t i = 0; i < livingCells; i++) {
+    std::cout << "\n"
+              << i << " point neigh is "
+              << countNeighbors(arrLiveCells, arrLiveCells[i], rows, cols)
+              << "\n"
+              << std::endl;
+  }
+
+  delArr(arrLiveCells, livingCells);
+  std::cout << std::endl;
+  system("pause");
   return EXIT_SUCCESS;
 }
 
@@ -149,35 +181,105 @@ void readState(unsigned**& arr, unsigned& inRows, unsigned& inCols,
   }
 }
 
-    #include <windows.h>
-    
+// #include <windows.h> // для Ansi последовательности
 
 /**
  * @brief функция, отображающая поле
  *
  * @todo разобраться с очисткой терминала при отображении
  */
-void printArea(unsigned**& arr, unsigned rows, unsigned cols, unsigned numPoints) {
-  // использую последовательность, т.к. system("cls") ("clear")
-  // не работают
-  std::cout << "\033[2J\033[1;1H";    
+void printArea(unsigned**& arr, unsigned rows, unsigned cols,
+               unsigned numPoints) {
+  clearScreen();
+
 #ifdef DEBUG
-#endif
   std::cout << "rows " << rows << std::endl;
   std::cout << "cols " << cols << std::endl;
+#endif
 
   for (unsigned i{0}; i < rows; i++) {
     for (unsigned j{0}; j < cols; j++) {
       bool flag{0};
-      for(unsigned k{0}; k< numPoints; k++){
-        if(arr[k][0]==i && arr[k][1] == j){
-          std::cout << "* ";    
+      for (unsigned k{0}; k < numPoints; k++) {
+        if (arr[k][0] == i && arr[k][1] == j) {
+          std::cout << "* ";
           flag = 1;
         }
       }
-      if(flag == 0)
-        std::cout << "- ";
+      if (flag == 0) std::cout << "- ";
     }
     std::cout << std::endl;
   }
 }
+
+/**
+ * @brief очистка экрана перед выводом поля
+ */
+void clearScreen() {
+#if CLEAR_AREA_STYLE == CLEAR_BARE_ENTER
+  for (int i = 0; i < 50; i++) {
+    std::cout << std::endl;
+  }
+#elif CLEAR_AREA_STYLE == CLEAR_CLS
+  std::system("cls");
+#elif CLEAR_AREA_STYLE == CLEAR_CLEAR
+  std::system("clear");
+#elif CLEAR_AREA_STYLE == CLEAR_ANSI
+  std::cout << "\033[2J\033[1;1H" << std::endl;
+#endif
+}
+
+/**
+ * @brief Выводит информацию о текущем поколении и количестве живых клеток.
+ *
+ * @param[in] generation Номер текущего поколения.
+ * @param[in] livingCells Количество живых клеток в текущем поколении.
+ */
+void printResult(unsigned generation, unsigned livingCells) {
+  std::cout << "Generation: " << generation << ". Alive cells: " << livingCells;
+}
+
+/**
+ * @brief Подсчёт количества живых соседей
+ *
+ * @param[in] arr указатель на массив, содержащий координаты живых клеток
+ * @param[in] point указатель на массив, содержащий координаты живой клетки
+ * @return количество живых соседей
+ */
+unsigned countNeighbors(unsigned**& arr, unsigned* point, unsigned rows,
+                        unsigned cols) {
+  unsigned count{0};
+  /*
+  if(point[0] == 0){
+    if (point[1] == 0)
+    {
+
+  }
+
+}
+else if(point[0] == (rows-1)){
+
+}
+else if(point[1] == 0){
+
+}
+else if(point[1] == (cols-1)){
+
+}
+*/
+  std::cout << "\npoint X" << point[1] << std::endl;
+  std::cout << "point Y" << point[0] << std::endl;
+
+  if ((point[0] > 0 || point[0] < (rows - 1)) &&
+      (point[1] > 0 || point[1] < (cols - 1))) {
+    std::cout << "\nURAAA HARD GRID!" << std::endl;
+    if ((point[0] == 0 || point[0] == (rows - 1)) ||
+        (point[1] == 0 || point[1] == (cols - 1))) {
+      std::cout << "\nWEAK GRID!" << std::endl;
+    }
+  }
+
+  return 0;
+};
+
+// void updateArea(){};
