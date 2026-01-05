@@ -31,40 +31,45 @@
 /// @brief выбор формата очистки поля
 #define CLEAR_AREA_STYLE CLEAR_BARE_ENTER
 
+struct tSizeArea {
+  int rows;  // размер поля по вертикали
+  int cols;  // размер поля по горизонтали
+};
+
 // прототипы функций
-void print_two_dim_array(unsigned** arr, unsigned rows, unsigned cols);
-void delArr(unsigned**& arrToDel, unsigned numRow);
-void readState(unsigned**& arr, unsigned& inRows, unsigned& inCols,
-               unsigned& count);
+void printTwoDimArray(int** arr, tSizeArea sizeArea);
+void delArr(int**& arrToDel, int numRow);
+void readState(int**& arr, tSizeArea& sizeArea, int& count);
+
 void clearScreen();
-void printArea(unsigned**& arr, unsigned rows, unsigned cols,
-               unsigned numPoints);
-void printResult(unsigned generation, unsigned livingCells);
-unsigned countNeighbors(unsigned**& arr, unsigned* point, unsigned rows,
-                        unsigned cols);
+void printArea(int**& arr, tSizeArea sizeArea, int numPoints);
+void printResult(int generation, int livingCells);
+int countNeighbors(int**& arr, int* point, tSizeArea sizeArea);
 // void updateArea();
 
 int main() {
-  unsigned generation{1},           // номер поколения
+  int generation{1},                // номер поколения
       rows{0},                      // размер поля по вертикали
       cols{0},                      // размер поля по горизонтали
       livingCells{0},               // текущее количество живых клеток
       prevLivingCells{0},           // предыдущее количество живых клеток
       **arrLiveCells{nullptr},      // массив позиций живых клеток
       **prevArrLiveCells{nullptr};  // массив предыдущих позиций живых клеток
-
-  readState(arrLiveCells, rows, cols, livingCells);
+  tSizeArea sizeArea{
+      0,
+  };
+  readState(arrLiveCells, sizeArea, livingCells);
 #ifdef DEBUG
   std::cout << "Debug: Считанный массив " << std::endl;
-  print_two_dim_array(arrLiveCells, points, 2);
+  printTwoDimArray(arrLiveCells, points, 2);
 #endif
-  printArea(arrLiveCells, rows, cols, livingCells);
+  printArea(arrLiveCells, sizeArea, livingCells);
   printResult(generation, livingCells);
 
   for (size_t i = 0; i < livingCells; i++) {
     std::cout << "\n"
               << i << " point neigh is "
-              << countNeighbors(arrLiveCells, arrLiveCells[i], rows, cols)
+              << countNeighbors(arrLiveCells, arrLiveCells[i], sizeArea)
               << "\n"
               << std::endl;
   }
@@ -76,18 +81,17 @@ int main() {
 }
 
 /**
- * @brief Выводит на экран содержимое двумерного массива типа unsigned.
+ * @brief Выводит на экран содержимое двумерного массива типа int.
  *
- * @param[in] dim_array Указатель на двумерный массив для вывода.
- * @param[in] rows Количество строк в массиве. Должно быть ≥ 0.
- * @param[in] cols Количество столбцов в массиве. Должно быть ≥ 0.
+ * @param[in] arr Указатель на двумерный массив для вывода.
+ * @param[in] sizeArea Количество строк и столбцов в массиве. 
  *
  * @warning Не выполняет проверку указателей на nullptr. При передаче
  *          некорректных указателей возможно неопределенное поведение.
  */
-void print_two_dim_array(unsigned** dim_array, unsigned rows, unsigned cols) {
-  for (unsigned** p{dim_array}; p < dim_array + rows; p++) {
-    for (unsigned* p_in{*p}; p_in < *p + cols; p_in++) {
+void printTwoDimArray(int** arr, tSizeArea sizeArea) {
+  for (int** p{arr}; p < arr + sizeArea.rows; p++) {
+    for (int* p_in{*p}; p_in < *p + sizeArea.cols; p_in++) {
       std::cout << *p_in << " ";
     }
     std::cout << std::endl;
@@ -95,7 +99,7 @@ void print_two_dim_array(unsigned** dim_array, unsigned rows, unsigned cols) {
 }
 
 /**
- * @brief Освобождает память, выделенную под двумерный массив типа unsigned.
+ * @brief Освобождает память, выделенную под двумерный массив типа int.
  *
  * После выполнения указатель arrToDel устанавливается в неопределенное
  * состояние (не nullptr).
@@ -103,9 +107,9 @@ void print_two_dim_array(unsigned** dim_array, unsigned rows, unsigned cols) {
  * @param[in,out] arrToDel Указатель на двумерный массив для освобождения.
  * @param[in] numRow Количество строк (первая размерность) в массиве.
  */
-void delArr(unsigned**& arrToDel, unsigned numRow) {
+void delArr(int**& arrToDel, int numRow) {
   if (arrToDel != nullptr) {
-    for (unsigned i = 0; i < numRow; i++) {
+    for (int i = 0; i < numRow; i++) {
       delete[] arrToDel[i];
     }
     delete[] arrToDel;
@@ -118,8 +122,7 @@ void delArr(unsigned**& arrToDel, unsigned numRow) {
  *
  * @param[out] arr Указатель на двумерный массив для хранения координат живых
  * клеток. Размерность: [count][2], где [i][0] - x, [i][1] - y.
- * @param[out] inRows Количество строк игрового поля.
- * @param[out] inCols Количество столбцов игрового поля.
+ * @param[in] sizeArea Количество строк и столбцов в массиве. 
  * @param[out] count Количество живых клеток.
  *
  * @note
@@ -129,24 +132,23 @@ void delArr(unsigned**& arrToDel, unsigned numRow) {
  *   - Первая строка, второе поле: количество столбцов поля (inCols)
  *   - Последующие строки: пары координат (x, y) живых клеток
  */
-void readState(unsigned**& arr, unsigned& inRows, unsigned& inCols,
-               unsigned& count) {
+void readState(int**& arr, tSizeArea& sizeArea, int& count) {
   std::string s;
   std::ifstream fin("in.txt");
   if (fin.is_open()) {
 #ifdef DEBUG
     std::cout << "file is open" << std::endl;
 #endif
-    fin >> inRows;
-    fin >> inCols;
+    fin >> sizeArea.rows;
+    fin >> sizeArea.cols;
 
 #ifdef DEBUG
-    std::cout << "inRows " << inRows << std::endl;
-    std::cout << "inCols " << inCols << std::endl;
+    std::cout << "sizeArea.rows " << sizeArea.rows << std::endl;
+    std::cout << "sizeArea.cols " << sizeArea.cols << std::endl;
 #endif
 
     count = 0;
-    unsigned x, y;
+    int x, y;
     // Считываем оставшиеся пары чисел
     while (fin >> x >> y) {
       count++;
@@ -158,13 +160,13 @@ void readState(unsigned**& arr, unsigned& inRows, unsigned& inCols,
     fin.clear();   // сбрасываем флаг конца файла
     fin.seekg(0);  // возвращаемся в начало файла
 
-    arr = new unsigned*[count]{0};
-    for (unsigned i{}; i < count; i++) {
-      arr[i] = new unsigned[2]{};
+    arr = new int*[count]{0};
+    for (int i{}; i < count; i++) {
+      arr[i] = new int[2]{};
     }
 
-    unsigned i{0};
-    unsigned tmp{0};
+    int i{0};
+    int tmp{0};
     fin >> tmp;  // пропуск inRows
     fin >> tmp;  // пропуск inCols
     while (i < count) {
@@ -173,7 +175,7 @@ void readState(unsigned**& arr, unsigned& inRows, unsigned& inCols,
       i++;
     }
 #ifdef DEBUG
-    print_two_dim_array(arr, count, 2);
+    printTwoDimArray(arr, count, 2);
 #endif
     fin.close();
   } else {
@@ -188,8 +190,7 @@ void readState(unsigned**& arr, unsigned& inRows, unsigned& inCols,
  *
  * @todo разобраться с очисткой терминала при отображении
  */
-void printArea(unsigned**& arr, unsigned rows, unsigned cols,
-               unsigned numPoints) {
+void printArea(int**& arr, tSizeArea sizeArea, int numPoints) {
   clearScreen();
 
 #ifdef DEBUG
@@ -197,10 +198,10 @@ void printArea(unsigned**& arr, unsigned rows, unsigned cols,
   std::cout << "cols " << cols << std::endl;
 #endif
 
-  for (unsigned i{0}; i < rows; i++) {
-    for (unsigned j{0}; j < cols; j++) {
+  for (int i{0}; i < sizeArea.rows; i++) {
+    for (int j{0}; j < sizeArea.cols; j++) {
       bool flag{0};
-      for (unsigned k{0}; k < numPoints; k++) {
+      for (int k{0}; k < numPoints; k++) {
         if (arr[k][0] == i && arr[k][1] == j) {
           std::cout << "* ";
           flag = 1;
@@ -235,7 +236,7 @@ void clearScreen() {
  * @param[in] generation Номер текущего поколения.
  * @param[in] livingCells Количество живых клеток в текущем поколении.
  */
-void printResult(unsigned generation, unsigned livingCells) {
+void printResult(int generation, int livingCells) {
   std::cout << "Generation: " << generation << ". Alive cells: " << livingCells;
 }
 
@@ -246,9 +247,8 @@ void printResult(unsigned generation, unsigned livingCells) {
  * @param[in] point указатель на массив, содержащий координаты живой клетки
  * @return количество живых соседей
  */
-unsigned countNeighbors(unsigned**& arr, unsigned* point, unsigned rows,
-                        unsigned cols) {
-  unsigned count{0};
+int countNeighbors(int**& arr, int* point, tSizeArea sizeArea) {
+  int count{0};
   /*
   if(point[0] == 0){
     if (point[1] == 0)
@@ -270,16 +270,18 @@ else if(point[1] == (cols-1)){
   std::cout << "\npoint X" << point[1] << std::endl;
   std::cout << "point Y" << point[0] << std::endl;
 
+  if ((point[0] == 0 || point[0] == (sizeArea.rows - 1)) ||
+      (point[1] == 0 || point[1] == (sizeArea.cols - 1))) {
+    std::cout << "\nedge poin!" << std::endl;
+  }
+  /*
   if ((point[0] > 0 || point[0] < (rows - 1)) &&
       (point[1] > 0 || point[1] < (cols - 1))) {
     std::cout << "\nURAAA HARD GRID!" << std::endl;
-    if ((point[0] == 0 || point[0] == (rows - 1)) ||
-        (point[1] == 0 || point[1] == (cols - 1))) {
-      std::cout << "\nWEAK GRID!" << std::endl;
-    }
-  }
+
+  }*/
 
   return 0;
 };
 
-// void updateArea(){};
+// int** createArr(int rows)
