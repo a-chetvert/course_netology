@@ -38,44 +38,49 @@ struct tSizeArea {
 
 // прототипы функций
 void printTwoDimArray(int** arr, tSizeArea sizeArea);
-void delArr(int**& arrToDel, int numRow);
-void readState(int**& arr, tSizeArea& sizeArea, int& count);
+void createArr(int**& arr, tSizeArea sizeArea);
+void delArr(int**& arrToDel, tSizeArea sizeArea);
+void readFile(int**& arr, tSizeArea& sizeArea);
 
 void clearScreen();
-void printArea(int**& arr, tSizeArea sizeArea, int numPoints);
+void printArea(int** arr, tSizeArea sizeArea);
 void printResult(int generation, int livingCells);
 int countNeighbors(int**& arr, int* point, tSizeArea sizeArea);
 // void updateArea();
 
 int main() {
-  int generation{1},                // номер поколения
-      rows{0},                      // размер поля по вертикали
-      cols{0},                      // размер поля по горизонтали
-      livingCells{0},               // текущее количество живых клеток
-      prevLivingCells{0},           // предыдущее количество живых клеток
-      **arrLiveCells{nullptr},      // массив позиций живых клеток
-      **prevArrLiveCells{nullptr};  // массив предыдущих позиций живых клеток
+  int generation{1},       // номер поколения
+      rows{0},             // размер поля по вертикали
+      cols{0},             // размер поля по горизонтали
+      livingCells{0},      // текущее количество живых клеток
+      prevLivingCells{0},  // предыдущее количество живых клеток
+      **nextArrCells{
+          nullptr},         // массив позиций живых клеток следующее поколение
+      **arrCells{nullptr},  // массив позиций живых клеток
+      **prevArrCells{nullptr};  // массив предыдущих позиций живых клеток
   tSizeArea sizeArea{
       0,
   };
-  readState(arrLiveCells, sizeArea, livingCells);
+  readFile(arrCells, sizeArea);
+
 #ifdef DEBUG
   std::cout << "Debug: Считанный массив " << std::endl;
-  printTwoDimArray(arrLiveCells, points, 2);
+  printTwoDimArray(arrCells, sizeArea);
 #endif
-  printArea(arrLiveCells, sizeArea, livingCells);
-  printResult(generation, livingCells);
 
-  for (size_t i = 0; i < livingCells; i++) {
-    std::cout << "\n"
-              << i << " point neigh is "
-              << countNeighbors(arrLiveCells, arrLiveCells[i], sizeArea)
-              << "\n"
-              << std::endl;
-  }
+  printArea(arrCells, sizeArea);
 
-  delArr(arrLiveCells, livingCells);
-  std::cout << std::endl;
+  createArr(nextArrCells, sizeArea);
+
+  // запоминаем состояние
+  prevArrCells = arrCells;
+
+  // очищаем первый массив
+  delArr(arrCells, sizeArea);
+
+  // инициализируем
+  createArr(arrCells, sizeArea);
+
   system("pause");
   return EXIT_SUCCESS;
 }
@@ -84,7 +89,7 @@ int main() {
  * @brief Выводит на экран содержимое двумерного массива типа int.
  *
  * @param[in] arr Указатель на двумерный массив для вывода.
- * @param[in] sizeArea Количество строк и столбцов в массиве. 
+ * @param[in] sizeArea Количество строк и столбцов в массиве.
  *
  * @warning Не выполняет проверку указателей на nullptr. При передаче
  *          некорректных указателей возможно неопределенное поведение.
@@ -107,9 +112,9 @@ void printTwoDimArray(int** arr, tSizeArea sizeArea) {
  * @param[in,out] arrToDel Указатель на двумерный массив для освобождения.
  * @param[in] numRow Количество строк (первая размерность) в массиве.
  */
-void delArr(int**& arrToDel, int numRow) {
+void delArr(int**& arrToDel, tSizeArea sizeArea) {
   if (arrToDel != nullptr) {
-    for (int i = 0; i < numRow; i++) {
+    for (int i = 0; i < sizeArea.rows; i++) {
       delete[] arrToDel[i];
     }
     delete[] arrToDel;
@@ -119,20 +124,9 @@ void delArr(int**& arrToDel, int numRow) {
 
 /**
  * @brief Чтение начального состояния из файла "in.txt".
- *
- * @param[out] arr Указатель на двумерный массив для хранения координат живых
- * клеток. Размерность: [count][2], где [i][0] - x, [i][1] - y.
- * @param[in] sizeArea Количество строк и столбцов в массиве. 
- * @param[out] count Количество живых клеток.
- *
- * @note
- * Функция считывает размеры поля и координаты живых клеток из текстового файла.
- * Формат файла:
- *   - Первая строка, первое поле: количество строк поля (inRows)
- *   - Первая строка, второе поле: количество столбцов поля (inCols)
- *   - Последующие строки: пары координат (x, y) живых клеток
+ * переписать
  */
-void readState(int**& arr, tSizeArea& sizeArea, int& count) {
+void readFile(int**& arr, tSizeArea& sizeArea) {
   std::string s;
   std::ifstream fin("in.txt");
   if (fin.is_open()) {
@@ -147,71 +141,50 @@ void readState(int**& arr, tSizeArea& sizeArea, int& count) {
     std::cout << "sizeArea.cols " << sizeArea.cols << std::endl;
 #endif
 
-    count = 0;
-    int x, y;
-    // Считываем оставшиеся пары чисел
-    while (fin >> x >> y) {
-      count++;
+    // заменить функцией
+    createArr(arr, sizeArea);
+    /*
+    arr = new int*[sizeArea.rows];
+    for (int i = 0; i < sizeArea.rows; i++) {
+      arr[i] = new int[sizeArea.cols]{
+          0,
+      };
     }
+      */
 
+    int x{0}, y{0};
+    while (fin >> y >> x) {
 #ifdef DEBUG
-    std::cout << "count " << count << std::endl;
+      std::cout << "x " << x << ", y " << y << std::endl;
 #endif
-    fin.clear();   // сбрасываем флаг конца файла
-    fin.seekg(0);  // возвращаемся в начало файла
-
-    arr = new int*[count]{0};
-    for (int i{}; i < count; i++) {
-      arr[i] = new int[2]{};
+      if (fin.eof()) {
+        break;
+      }
+      arr[y][x] = 1;
     }
-
-    int i{0};
-    int tmp{0};
-    fin >> tmp;  // пропуск inRows
-    fin >> tmp;  // пропуск inCols
-    while (i < count) {
-      fin >> arr[i][0];
-      fin >> arr[i][1];
-      i++;
-    }
-#ifdef DEBUG
-    printTwoDimArray(arr, count, 2);
-#endif
     fin.close();
   } else {
     std::cout << "Не получилось открыть файл!" << std::endl;
   }
 }
 
-// #include <windows.h> // для Ansi последовательности
-
 /**
  * @brief функция, отображающая поле
  *
  * @todo разобраться с очисткой терминала при отображении
  */
-void printArea(int**& arr, tSizeArea sizeArea, int numPoints) {
+void printArea(int** arr, tSizeArea sizeArea) {
   clearScreen();
-
-#ifdef DEBUG
-  std::cout << "rows " << rows << std::endl;
-  std::cout << "cols " << cols << std::endl;
-#endif
 
   for (int i{0}; i < sizeArea.rows; i++) {
     for (int j{0}; j < sizeArea.cols; j++) {
-      bool flag{0};
-      for (int k{0}; k < numPoints; k++) {
-        if (arr[k][0] == i && arr[k][1] == j) {
-          std::cout << "* ";
-          flag = 1;
-        }
-      }
-      if (flag == 0) std::cout << "- ";
+      std::cout << (arr[i][j] ? "* " : "- ");
     }
     std::cout << std::endl;
   }
 }
+
+// #include <windows.h> // для Ansi последовательности
 
 /**
  * @brief очистка экрана перед выводом поля
@@ -243,45 +216,60 @@ void printResult(int generation, int livingCells) {
 /**
  * @brief Подсчёт количества живых соседей
  *
- * @param[in] arr указатель на массив, содержащий координаты живых клеток
- * @param[in] point указатель на массив, содержащий координаты живой клетки
+
  * @return количество живых соседей
  */
-int countNeighbors(int**& arr, int* point, tSizeArea sizeArea) {
+int countNeighbors(int**& arr, tSizeArea sizeArea, int x, int y) {
   int count{0};
-  /*
-  if(point[0] == 0){
-    if (point[1] == 0)
-    {
 
+
+  if (y == 0 && x == 0)
+  {
+    std::cout << "UPS y == 0 && x == 0\n" << std::endl;
   }
-
-}
-else if(point[0] == (rows-1)){
-
-}
-else if(point[1] == 0){
-
-}
-else if(point[1] == (cols-1)){
-
-}
-*/
-  std::cout << "\npoint X" << point[1] << std::endl;
-  std::cout << "point Y" << point[0] << std::endl;
-
-  if ((point[0] == 0 || point[0] == (sizeArea.rows - 1)) ||
-      (point[1] == 0 || point[1] == (sizeArea.cols - 1))) {
-    std::cout << "\nedge poin!" << std::endl;
+  else if (y == (sizeArea.rows-1) && x == (sizeArea.cols-1)){
+    std::cout << "y == (sizeArea.rows-1) && x == (sizeArea.cols-1)\n" << std::endl;
   }
-  /*
-  if ((point[0] > 0 || point[0] < (rows - 1)) &&
-      (point[1] > 0 || point[1] < (cols - 1))) {
-    std::cout << "\nURAAA HARD GRID!" << std::endl;
+  else if (y == 0 && x == (sizeArea.cols-1)){
+    std::cout << "y == 0 && x == (sizeArea.cols-1)\n" << std::endl;
+  }
+  else if (y == (sizeArea.rows-1) && x == 0){
+    std::cout << "(y == (sizeArea.rows-1) && x == 0)\n" << std::endl;
+  }
+  else if (y == 0){
+    std::cout << "y == 0\n" << std::endl;
+  }
+  else if (x == 0){
 
-  }*/
+    std::cout << "x == 0\n" << std::endl;
+  }
+  else if (y == sizeArea.rows-1){
+    std::cout << "y == sizeArea.rows-1\n" << std::endl;
+  }
+  else if (x == sizeArea.cols-1){
+    std::cout << "x == sizeArea.cols-1\n" << std::endl;
+  }
+  else {
+    if(arr[y-1][x-1]) count++;
+    if(arr[y-1][x]) count++;
+    if(arr[y-1][x+1]) count++;
+    
+    if(arr[y][x+1]) count++;
+    if(arr[y][x-1]) count++;
 
-  return 0;
+    if(arr[y+1][x-1]) count++;
+    if(arr[y+1][x]) count++;
+    if(arr[y+1][x+1]) count++;
+  }
+  return count;
 };
 
+void createArr(int**& arr, tSizeArea sizeArea) {
+  arr = new int*[sizeArea.rows];
+  for (int i = 0; i < sizeArea.rows; i++) {
+    arr[i] = new int[sizeArea.cols]{
+        0,
+    };
+  }
+}
 // int** createArr(int rows)
