@@ -29,12 +29,13 @@
 
 /// @defgroup выбор формата очистки поля
 #define CLEAR_BARE_ENTER 0  ///< @brief заполнение пустыми строками
-#define CLEAR_CLS 0         ///< @brief использование функции system("cls")
-#define CLEAR_CLEAR 0       ///< @brief использование функции system("clear")
-#define CLEAR_ANSI 0        ///< @brief управляющая последовательность ANSI
+#define CLEAR_CLS 1         ///< @brief использование функции system("cls")
+#define CLEAR_CLS_BIG 2         ///< @brief использование функции system("cls")
+#define CLEAR_CLEAR 3       ///< @brief использование функции system("clear")
+#define CLEAR_ANSI 4       ///< @brief управляющая последовательность ANSI
 
 /// @brief выбор формата очистки поля
-#define CLEAR_AREA_STYLE CLEAR_BARE_ENTER
+#define CLEAR_AREA_STYLE CLEAR_CLS_BIG
 
 struct tSizeArea {
   int rows;  // размер поля по вертикали
@@ -236,6 +237,8 @@ void clearScreen() {
   }
 #elif CLEAR_AREA_STYLE == CLEAR_CLS
   std::system("cls");
+#elif CLEAR_AREA_STYLE == CLEAR_CLS_BIG
+  std::system("CLS");
 #elif CLEAR_AREA_STYLE == CLEAR_CLEAR
   std::system("clear");
 #elif CLEAR_AREA_STYLE == CLEAR_ANSI
