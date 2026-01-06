@@ -2,18 +2,23 @@
  * @brief Курсовой проект «Игра "Жизнь"»
  * @note  https://github.com/netology-code/cpps-diplom
  *
+ * @warning 
+ * - для выбора формата очистки поля заполнить макрос
+ * CLEAR_AREA_STYLE
+ * - код работает только в скомпилированном виде
+ * работоспособности в терминале vscode получить
+ * не удалось 
+ * - скомпилированный файл exe называется "main.exee"
+ * (для запуска переименовать на "main.exe")
+ * 
  * @todo
  * - добавить доп проверки при чтении точек
- * - проверить работу на нечетном количестве точек
- * - разбить readState() на несколько функций (слишком большая функция)
- * - подтянуть адекватный clang-format
- * - добавить функцию вывода для отладки
- * - проверку на наличие клеток в файле (если их нет - вывести пустоеполе)
- *
+ * - добавить функцию вывода для отладки *
  * @ask
- * - не работает system("cls") и ("clear")
+ * - не работает system("cls"), ("clear")
  */
-#include <unistd.h>  // для sleep()
+#include <unistd.h>   // для sleep()
+#include <windows.h>  // для Ansi последовательности
 
 #include <cstdlib>  // для system("clear"), system("cls")
 #include <fstream>
@@ -36,6 +41,8 @@ struct tSizeArea {
   int cols;  // размер поля по горизонтали
 };
 
+enum class state { ALL_OK, STAGNAITED, CELLS_DEAD };
+
 // прототипы функций
 void printTwoDimArray(int** arr, tSizeArea sizeArea);
 void createArr(int**& arr, tSizeArea sizeArea);
@@ -45,43 +52,88 @@ void readFile(int**& arr, tSizeArea& sizeArea);
 void clearScreen();
 void printArea(int** arr, tSizeArea sizeArea);
 void printResult(int generation, int livingCells);
-int countNeighbors(int**& arr, int* point, tSizeArea sizeArea);
-// void updateArea();
+int countNeighbors(int**& arr, tSizeArea sizeArea, int y, int x);
+void calcLiveCell(int**& arr, tSizeArea sizeArea, int& livingCells);
+bool isStagnated(int**& arr1, int**& arr2, tSizeArea sizeArea);
 
 int main() {
-  int generation{1},       // номер поколения
-      rows{0},             // размер поля по вертикали
-      cols{0},             // размер поля по горизонтали
-      livingCells{0},      // текущее количество живых клеток
-      prevLivingCells{0},  // предыдущее количество живых клеток
+  int generation{1},   // номер поколения
+      rows{0},         // размер поля по вертикали
+      cols{0},         // размер поля по горизонтали
+      livingCells{0},  // текущее количество живых клеток
       **nextArrCells{
           nullptr},         // массив позиций живых клеток следующее поколение
       **arrCells{nullptr},  // массив позиций живых клеток
       **prevArrCells{nullptr};  // массив предыдущих позиций живых клеток
-  tSizeArea sizeArea{
-      0,
-  };
+  tSizeArea sizeArea{0, };
+  state stateCells{state::ALL_OK};  // состояние клеток/поля
+
   readFile(arrCells, sizeArea);
 
-#ifdef DEBUG
-  std::cout << "Debug: Считанный массив " << std::endl;
-  printTwoDimArray(arrCells, sizeArea);
-#endif
+  while (true) {
+    calcLiveCell(arrCells, sizeArea, livingCells);
+    printArea(arrCells, sizeArea);
+    printResult(generation, livingCells);
+    createArr(nextArrCells, sizeArea);
+    for (int i = 0; i < sizeArea.rows; i++) {
+      for (int j = 0; j < sizeArea.cols; j++) {
+        int neighbors = countNeighbors(arrCells, sizeArea, i, j);
 
-  printArea(arrCells, sizeArea);
+        if (arrCells[i][j] == 1) {  // Живая клетка
+          if (neighbors == 2 || neighbors == 3) {
+            nextArrCells[i][j] = 1;  // Остается живой
+          } else {
+            nextArrCells[i][j] = 0;  // Умирает
+          }
+        } else {  // Мертвая клетка
+          if (neighbors == 3) {
+            nextArrCells[i][j] = 1;  // Рождается
+          } else {
+            nextArrCells[i][j] = 0;  // Остается мертвой
+          }
+        }
+      }
+    }
 
-  createArr(nextArrCells, sizeArea);
+    if (livingCells == 0) {
+      stateCells = state::CELLS_DEAD;
+      break;
+    }
 
-  // запоминаем состояние
-  prevArrCells = arrCells;
+    if (isStagnated(arrCells, nextArrCells, sizeArea)) {
+      generation++;
+      printArea(arrCells, sizeArea);
+      printResult(generation, livingCells);
+      stateCells = state::STAGNAITED;
+      break;
+    }
 
-  // очищаем первый массив
+    // очищаем первый массив
+    delArr(arrCells, sizeArea);
+
+    // запоминаем состояние
+    arrCells = nextArrCells;
+
+    generation++;
+
+    // не работает ни в терминале, ни в exe
+    // sleep(100);
+    system("pause");
+  }
+
+  if (stateCells == state::STAGNAITED) {
+    std::cout << "The world is stagnated. ";
+  } else if (stateCells == state::CELLS_DEAD) {
+    std::cout << "All cells are dead. ";
+  }
+
+  std::cout << "Game over\n";
+
   delArr(arrCells, sizeArea);
-
-  // инициализируем
-  createArr(arrCells, sizeArea);
+  delArr(nextArrCells, sizeArea);
 
   system("pause");
+
   return EXIT_SUCCESS;
 }
 
@@ -90,9 +142,6 @@ int main() {
  *
  * @param[in] arr Указатель на двумерный массив для вывода.
  * @param[in] sizeArea Количество строк и столбцов в массиве.
- *
- * @warning Не выполняет проверку указателей на nullptr. При передаче
- *          некорректных указателей возможно неопределенное поведение.
  */
 void printTwoDimArray(int** arr, tSizeArea sizeArea) {
   for (int** p{arr}; p < arr + sizeArea.rows; p++) {
@@ -106,11 +155,8 @@ void printTwoDimArray(int** arr, tSizeArea sizeArea) {
 /**
  * @brief Освобождает память, выделенную под двумерный массив типа int.
  *
- * После выполнения указатель arrToDel устанавливается в неопределенное
- * состояние (не nullptr).
- *
  * @param[in,out] arrToDel Указатель на двумерный массив для освобождения.
- * @param[in] numRow Количество строк (первая размерность) в массиве.
+ * @param[in] sizeArea Структура с количеством строк (первая размерность).
  */
 void delArr(int**& arrToDel, tSizeArea sizeArea) {
   if (arrToDel != nullptr) {
@@ -124,7 +170,10 @@ void delArr(int**& arrToDel, tSizeArea sizeArea) {
 
 /**
  * @brief Чтение начального состояния из файла "in.txt".
- * переписать
+ * 
+ * @param[in] arr Указатель на двумерный массив, куда записывать из файла.
+ * @param[in] sizeArea ссылка на структуру с параметрами поля
+ * 
  */
 void readFile(int**& arr, tSizeArea& sizeArea) {
   std::string s;
@@ -141,27 +190,19 @@ void readFile(int**& arr, tSizeArea& sizeArea) {
     std::cout << "sizeArea.cols " << sizeArea.cols << std::endl;
 #endif
 
-    // заменить функцией
     createArr(arr, sizeArea);
-    /*
-    arr = new int*[sizeArea.rows];
-    for (int i = 0; i < sizeArea.rows; i++) {
-      arr[i] = new int[sizeArea.cols]{
-          0,
-      };
-    }
-      */
 
     int x{0}, y{0};
-    while (fin >> y >> x) {
-#ifdef DEBUG
-      std::cout << "x " << x << ", y " << y << std::endl;
-#endif
-      if (fin.eof()) {
-        break;
+    if (!fin.eof()) {
+      while (true) {
+        fin >> y >> x;
+        arr[y][x] = 1;
+        if (fin.eof()) {
+          break;
+        }
       }
-      arr[y][x] = 1;
     }
+
     fin.close();
   } else {
     std::cout << "Не получилось открыть файл!" << std::endl;
@@ -171,7 +212,8 @@ void readFile(int**& arr, tSizeArea& sizeArea) {
 /**
  * @brief функция, отображающая поле
  *
- * @todo разобраться с очисткой терминала при отображении
+ * @param[in] arr Указатель на двумерный массив с клетками
+ * @param[in] sizeArea ссылка на структуру с параметрами поля
  */
 void printArea(int** arr, tSizeArea sizeArea) {
   clearScreen();
@@ -183,8 +225,6 @@ void printArea(int** arr, tSizeArea sizeArea) {
     std::cout << std::endl;
   }
 }
-
-// #include <windows.h> // для Ansi последовательности
 
 /**
  * @brief очистка экрана перед выводом поля
@@ -210,60 +250,87 @@ void clearScreen() {
  * @param[in] livingCells Количество живых клеток в текущем поколении.
  */
 void printResult(int generation, int livingCells) {
-  std::cout << "Generation: " << generation << ". Alive cells: " << livingCells;
+  std::cout << "Generation: " << generation << ". Alive cells: " << livingCells
+            << std::endl;
 }
 
 /**
  * @brief Подсчёт количества живых соседей
  *
-
- * @return количество живых соседей
+ * @param[in] arr Двумерный массив, представляющий игровое поле.
+ *                Значение 1 соответствует живой клетке, 0 - мёртвой.
+ * @param[in] sizeArea Структура, содержащая размеры игрового поля
+ * @param[in] y Координата Y (номер строки) проверяемой клетки
+ * @param[in] x Координата X (номер столбца) проверяемой клетки
+ *
+ * @return Количество живых соседей от 0 до 8. 
  */
-int countNeighbors(int**& arr, tSizeArea sizeArea, int x, int y) {
+int countNeighbors(int**& arr, tSizeArea sizeArea, int y, int x) {
   int count{0};
 
+  if (y == 0 && x == 0) {
+    if (arr[y + 1][x]) count++;
+    if (arr[y + 1][x + 1]) count++;
+    if (arr[y][x + 1]) count++;
+  } else if (y == (sizeArea.rows - 1) && x == (sizeArea.cols - 1)) {
+    if (arr[y - 1][x]) count++;
+    if (arr[y - 1][x - 1]) count++;
+    if (arr[y][x - 1]) count++;
+  } else if (y == 0 && x == (sizeArea.cols - 1)) {
+    if (arr[y + 1][x]) count++;
+    if (arr[y + 1][x - 1]) count++;
+    if (arr[y][x - 1]) count++;
+  } else if (y == (sizeArea.rows - 1) && x == 0) {
+    if (arr[y - 1][x]) count++;
+    if (arr[y - 1][x + 1]) count++;
+    if (arr[y][x + 1]) count++;
+  } else if (y == 0) {
+    if (arr[y][x - 1]) count++;
+    if (arr[y][x + 1]) count++;
+    if (arr[y + 1][x - 1]) count++;
+    if (arr[y + 1][x]) count++;
+    if (arr[y + 1][x + 1]) count++;
+  } else if (x == 0) {
+    if (arr[y - 1][x]) count++;
+    if (arr[y + 1][x]) count++;
+    if (arr[y - 1][x + 1]) count++;
+    if (arr[y][x + 1]) count++;
+    if (arr[y + 1][x + 1]) count++;
+  } else if (y == sizeArea.rows - 1) {
+    if (arr[y][x - 1]) count++;
+    if (arr[y][x + 1]) count++;
+    if (arr[y - 1][x - 1]) count++;
+    if (arr[y - 1][x]) count++;
+    if (arr[y - 1][x + 1]) count++;
+  } else if (x == sizeArea.cols - 1) {
+    if (arr[y - 1][x]) count++;
+    if (arr[y + 1][x]) count++;
+    if (arr[y - 1][x - 1]) count++;
+    if (arr[y][x - 1]) count++;
+    if (arr[y + 1][x - 1]) count++;
+  } else if (x > 0 && x < (sizeArea.cols - 1) && y > 0 &&
+             y < (sizeArea.rows - 1)) {
+    if (arr[y - 1][x - 1]) count++;
+    if (arr[y - 1][x]) count++;
+    if (arr[y - 1][x + 1]) count++;
 
-  if (y == 0 && x == 0)
-  {
-    std::cout << "UPS y == 0 && x == 0\n" << std::endl;
-  }
-  else if (y == (sizeArea.rows-1) && x == (sizeArea.cols-1)){
-    std::cout << "y == (sizeArea.rows-1) && x == (sizeArea.cols-1)\n" << std::endl;
-  }
-  else if (y == 0 && x == (sizeArea.cols-1)){
-    std::cout << "y == 0 && x == (sizeArea.cols-1)\n" << std::endl;
-  }
-  else if (y == (sizeArea.rows-1) && x == 0){
-    std::cout << "(y == (sizeArea.rows-1) && x == 0)\n" << std::endl;
-  }
-  else if (y == 0){
-    std::cout << "y == 0\n" << std::endl;
-  }
-  else if (x == 0){
+    if (arr[y][x + 1]) count++;
+    if (arr[y][x - 1]) count++;
 
-    std::cout << "x == 0\n" << std::endl;
-  }
-  else if (y == sizeArea.rows-1){
-    std::cout << "y == sizeArea.rows-1\n" << std::endl;
-  }
-  else if (x == sizeArea.cols-1){
-    std::cout << "x == sizeArea.cols-1\n" << std::endl;
-  }
-  else {
-    if(arr[y-1][x-1]) count++;
-    if(arr[y-1][x]) count++;
-    if(arr[y-1][x+1]) count++;
-    
-    if(arr[y][x+1]) count++;
-    if(arr[y][x-1]) count++;
-
-    if(arr[y+1][x-1]) count++;
-    if(arr[y+1][x]) count++;
-    if(arr[y+1][x+1]) count++;
+    if (arr[y + 1][x - 1]) count++;
+    if (arr[y + 1][x]) count++;
+    if (arr[y + 1][x + 1]) count++;
   }
   return count;
 };
 
+/**
+ * @brief Динамически создаёт двумерный массив заданного размера 
+ * и инициализирует его нулями
+ *
+ * @param[out] arr Ссылка на указатель, который будет установлен на созданный массив.
+ * @param[in] sizeArea Структура, содержащая размеры создаваемого массива.
+ */
 void createArr(int**& arr, tSizeArea sizeArea) {
   arr = new int*[sizeArea.rows];
   for (int i = 0; i < sizeArea.rows; i++) {
@@ -272,4 +339,49 @@ void createArr(int**& arr, tSizeArea sizeArea) {
     };
   }
 }
-// int** createArr(int rows)
+
+/**
+ * @brief Подсчитывает количество живых клеток на игровом поле
+ *
+ * Функция проходит по всем элементам двумерного массива и подсчитывает
+ * количество ячеек со значением 1, которые представляют живые клетки.
+ *
+ * @param[in] arr Двумерный массив, представляющий игровое поле.
+ *                Значение 1 соответствует живой клетке, 0 - мёртвой.
+ * @param[in] sizeArea Структура, содержащая размеры игрового поля.
+ * @param[out] livingCells Ссылка на переменную, в которую будет записано
+ *                         общее количество живых клеток на поле.
+ */
+void calcLiveCell(int**& arr, tSizeArea sizeArea, int& livingCells) {
+  livingCells = 0;
+  for (int i{0}; i < sizeArea.rows; i++) {
+    for (int j{0}; j < sizeArea.cols; j++) {
+      if (arr[i][j] == 1) livingCells++;
+    }
+  }
+}
+
+/**
+ * @brief Проверяет, идентичны ли два игровых поля
+ *
+ * Функция сравнивает два двумерных массива поэлементно и определяет,
+ * содержат ли они одинаковые состояния. Используется для обнаружения
+ * стагнации (стабилизации) в игре "Жизнь", когда состояние поля
+ * перестаёт изменяться.
+ *
+ * @param[in] arr1 Указатель на первый двумерный массив (текущее состояние).
+ * @param[in] arr2 Указатель на второй двумерный массив (предыдущее состояние).
+ * @param[in] sizeArea Структура, содержащая размеры сравниваемых массивов.
+ *                     Оба массива должны иметь одинаковые размеры.
+ *
+ * @return true - если все соответствующие элементы массивов равны
+ *         false - если обнаружено хотя бы одно различие
+ */
+bool isStagnated(int**& arr1, int**& arr2, tSizeArea sizeArea) {
+  for (int i{0}; i < sizeArea.rows; i++) {
+    for (int j{0}; j < sizeArea.cols; j++) {
+      if (arr1[i][j] != arr2[i][j]) return 0;
+    }
+  }
+  return 1;
+}
