@@ -17,25 +17,35 @@
  * @ask
  * - не работает system("cls"), ("clear")
  */
-#include <unistd.h>   // для sleep()
+
+#ifdef _WIN32
 #include <windows.h>  // для Ansi последовательности
+#else
+#include <unistd.h>  
+#endif
+
+#include <thread>   // для std::this_thread::sleep_for
+#include <chrono>   // для time durations
 
 #include <cstdlib>  // для system("clear"), system("cls")
 #include <fstream>
 #include <iostream>
 
-/// @brief макрос для отладки
-// #define DEBUG
+/// @brief использование пауз
+#define USE_PAUSE
 
 /// @defgroup выбор формата очистки поля
 #define CLEAR_BARE_ENTER 0  ///< @brief заполнение пустыми строками
 #define CLEAR_CLS 1         ///< @brief использование функции system("cls")
-#define CLEAR_CLS_BIG 2         ///< @brief использование функции system("cls")
+#define CLEAR_CLS_BIG 2     ///< @brief использование функции system("cls")
 #define CLEAR_CLEAR 3       ///< @brief использование функции system("clear")
-#define CLEAR_ANSI 4       ///< @brief управляющая последовательность ANSI
+#define CLEAR_ANSI 4        ///< @brief управляющая последовательность ANSI
 
 /// @brief выбор формата очистки поля
 #define CLEAR_AREA_STYLE CLEAR_CLS_BIG
+
+/// @brief макрос для отладки
+// #define DEBUG
 
 struct tSizeArea {
   int rows;  // размер поля по вертикали
@@ -117,9 +127,12 @@ int main() {
 
     generation++;
 
-    // не работает ни в терминале, ни в exe
-    // sleep(100);
+  #ifdef USE_PAUSE
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+  #else
     system("pause");
+  #endif
+
   }
 
   if (stateCells == state::STAGNAITED) {
@@ -133,6 +146,7 @@ int main() {
   delArr(arrCells, sizeArea);
   delArr(nextArrCells, sizeArea);
 
+  // ASK является ли кроссплатформенной?
   system("pause");
 
   return EXIT_SUCCESS;
@@ -231,18 +245,22 @@ void printArea(int** arr, tSizeArea sizeArea) {
  * @brief очистка экрана перед выводом поля
  */
 void clearScreen() {
-#if CLEAR_AREA_STYLE == CLEAR_BARE_ENTER
-  for (int i = 0; i < 50; i++) {
-    std::cout << std::endl;
-  }
-#elif CLEAR_AREA_STYLE == CLEAR_CLS
-  std::system("cls");
-#elif CLEAR_AREA_STYLE == CLEAR_CLS_BIG
-  std::system("CLS");
-#elif CLEAR_AREA_STYLE == CLEAR_CLEAR
-  std::system("clear");
-#elif CLEAR_AREA_STYLE == CLEAR_ANSI
-  std::cout << "\033[2J\033[1;1H" << std::endl;
+#ifdef _WIN32
+  #if CLEAR_AREA_STYLE == CLEAR_BARE_ENTER
+    for (int i = 0; i < 50; i++) {
+      std::cout << std::endl;
+    }
+  #elif CLEAR_AREA_STYLE == CLEAR_CLS
+    std::system("cls");
+  #elif CLEAR_AREA_STYLE == CLEAR_CLS_BIG
+    std::system("CLS");
+  #elif CLEAR_AREA_STYLE == CLEAR_CLEAR
+    std::system("clear");
+  #elif CLEAR_AREA_STYLE == CLEAR_ANSI
+    std::cout << "\033[2J\033[1;1H" << std::endl;
+  #endif
+#else
+  std::cout << "\x1B[2J\x1B[H"; //Альтернатива: (void)system("clear")
 #endif
 }
 
