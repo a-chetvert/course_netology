@@ -1,1 +1,35 @@
 *.exe
+
+# Игнорировать:
+## Пользовательские файлы
+*.user
+*.suo
+*.userosscache
+
+## Файлы сборки и промежуточные файлы
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]uild/
+*.pdb
+*.ilk
+*.log
+*.idb
+*.pch
+
+## Файлы VS
+.vs/
+*.aps
+*.ncb
+*.opensdf
+*.sdf
+ipch/
+*.db
+*.opendb
+
+## Другое
+*.cache
+*.autosave
