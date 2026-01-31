@@ -1,6 +1,6 @@
 ﻿/**
- * @brief Задача 3. Вывод структуры
- * @note  https://github.com/netology-code/cppm-homeworks/tree/main/02/03
+ * @brief Задача 1. Калькулятор двух чисел
+ * @note  https://github.com/netology-code/cppm-homeworks/tree/main/03/01
  */
 #include <windows.h>
 
@@ -11,11 +11,10 @@
 #include <vector>
 
 class Calculator {
- public:
+ private:
   double num1;
   double num2;
-
-  // Конструктор по умолчанию
+ public:
   Calculator() : num1(0), num2(0) {};
   double add();
   double multiply();
@@ -23,8 +22,6 @@ class Calculator {
   double subtract_2_1();
   double divide_1_2();
   double divide_2_1();
-  /*
-  */
   bool set_num1(double num1);
   bool set_num2(double num2);
 };
@@ -36,56 +33,48 @@ int main() {
   SetConsoleCP(1251);
   SetConsoleOutputCP(1251);
   Calculator newCalc;
-  double tmpNum[2]{
-      0,
-  };  ///< временное хранение данных вводимых чисел
+  double tmpNum[2]{0, };  ///< временное хранение данных вводимых чисел
 
   while (true) {
     printEnterNum(1);
     std::cin >> tmpNum[0];
+    while (!newCalc.set_num1(tmpNum[0])) {
+      if (newCalc.set_num1(tmpNum[0]) == false) {
+        std::cout << utf8To1251("Неверный ввод!\n");
+      }
+      printEnterNum(1);
+      std::cin >> tmpNum[0];
+    }
     printEnterNum(2);
     std::cin >> tmpNum[1];
-
-    // если оба числа не равны нулю
-    // (функции возвр. true, если оба числа не ноль)
-    if (newCalc.set_num1(tmpNum[0]) && newCalc.set_num2(tmpNum[1])) {
-      std::cout << "num1 + num2 = " << newCalc.add() << std::endl;
-      std::cout << "num1 - num2 = " << newCalc.subtract_2_1() << std::endl;
-      std::cout << "num2 - num1 = " << newCalc.subtract_1_2() << std::endl;
-      std::cout << "num1 * num2 = " << newCalc.multiply() << std::endl;
-      std::cout << "num1 / num2 = " << newCalc.divide_1_2() << std::endl;
-      std::cout << "num2 / num1 = " << newCalc.divide_2_1() << std::endl;
-      
-    } else {
-      std::cout << utf8To1251("Неверный ввод!\n");
+    while (!newCalc.set_num2(tmpNum[1])) {
+      if (newCalc.set_num1(tmpNum[1]) == false) {
+        std::cout << utf8To1251("Неверный ввод!\n");
+      }
+      printEnterNum(2);
+      std::cin >> tmpNum[1];
     }
+    std::cout << "num1 + num2 = " << newCalc.add() << std::endl;
+    std::cout << "num1 - num2 = " << newCalc.subtract_2_1() << std::endl;
+    std::cout << "num2 - num1 = " << newCalc.subtract_1_2() << std::endl;
+    std::cout << "num1 * num2 = " << newCalc.multiply() << std::endl;
+    std::cout << "num1 / num2 = " << newCalc.divide_1_2() << std::endl;
+    std::cout << "num2 / num1 = " << newCalc.divide_2_1() << std::endl;
   }
   return EXIT_SUCCESS;
 }
 
-double Calculator::add() { 
-  return this->num1 + this->num2; 
-}
+double Calculator::add() { return this->num1 + this->num2; }
 
-double Calculator::multiply() { 
-  return this->num1 * this->num2; 
-}
+double Calculator::multiply() { return this->num1 * this->num2; }
 
-double Calculator::subtract_1_2() { 
-  return this->num2 - this->num1; 
-}
+double Calculator::subtract_1_2() { return this->num2 - this->num1; }
 
-double Calculator::subtract_2_1() { 
-  return this->num1 - this->num2; 
-}
+double Calculator::subtract_2_1() { return this->num1 - this->num2; }
 
-double Calculator::divide_1_2() { 
-  return this->num1 / this->num2;
-}
+double Calculator::divide_1_2() { return this->num1 / this->num2; }
 
-double Calculator::divide_2_1() { 
-  return this->num2 / this->num1; 
-}
+double Calculator::divide_2_1() { return this->num2 / this->num1; }
 
 bool Calculator::set_num1(double num1) {
   if (num1 == 0)
