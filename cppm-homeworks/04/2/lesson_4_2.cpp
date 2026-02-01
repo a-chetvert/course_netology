@@ -82,6 +82,9 @@ int main() {
         std::cout << utf8To1251("Не получилось открыть файл!") << std::endl;
     }
 
+    delete[] addresses;
+    addresses = nullptr;
+
     return EXIT_SUCCESS;
 }
 

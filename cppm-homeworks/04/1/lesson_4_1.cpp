@@ -24,7 +24,6 @@ class Address {
 };
 
 std::string utf8To1251(const std::string& utf8Str);
-std::string cp1251ToUtf8(const std::string& cp1251Str);
 
 int main() {
   SetConsoleCP(1251);
@@ -68,6 +67,9 @@ int main() {
   else {
       std::cout << utf8To1251("Не получилось открыть файл!") << std::endl;
   }
+
+  delete[] addresses;
+  addresses = nullptr;
 
   return EXIT_SUCCESS;
 }
