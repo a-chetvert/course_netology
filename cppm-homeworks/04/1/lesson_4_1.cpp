@@ -68,6 +68,10 @@ int main() {
       std::cout << utf8To1251("Не получилось открыть файл!") << std::endl;
   }
 
+  for (int i = 0; i < numAddresses; i++) {
+      delete[] addresses[i];
+  }
+
   delete[] addresses;
   addresses = nullptr;
 
