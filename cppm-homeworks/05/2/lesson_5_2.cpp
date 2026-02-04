@@ -4,15 +4,17 @@
  */
 #include <windows.h>
 #include <iostream>
+#include <string>
 
 class Figure {
  protected:
-  int a, b, c;  ///< стороны фигуры
-  int A, B, C;  ///< углы
+  int a, b, c;        ///< стороны фигуры
+  int A, B, C;        ///< углы
+  std::string name;   ///< название фигуры
 
  public:
   Figure(int a, int b, int c, int A, int B, int C);
-  virtual ~Figure() = default;
+  std::string get_name();
   int get_a();
   int get_b();
   int get_c();
@@ -172,6 +174,11 @@ Figure::Figure(int a, int b, int c, int A, int B, int C) {
   this->A = A;
   this->B = B;
   this->C = C;
+  name = "Фигура";
+}
+
+std::string Figure::get_name() {
+    return name;
 }
 
 Quadrilateral::Quadrilateral(int a, int b, int c, int d, int A, int B, int C, int D) : Figure(a, b, c, A, B, C) {
