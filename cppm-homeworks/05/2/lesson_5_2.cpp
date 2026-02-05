@@ -14,34 +14,24 @@ class Figure {
 
  public:
   Figure(int a, int b, int c, int A, int B, int C);
-  std::string get_name();
-  int get_a();
-  int get_b();
-  int get_c();
-  int get_A();
-  int get_B();
-  int get_C();
+  std::string get_name() const;
+  virtual void print_info() const = 0;
+  int get_a() const;
+  int get_b() const;
+  int get_c() const;
+  int get_A() const;
+  int get_B() const;
+  int get_C() const;
 };
 
-/**
- * @brief класс четырёхугольника
- */
-class Quadrilateral : public Figure {
-protected:
-    int d;      ///< четвёртая сторона
-    int D;      ///< четвёртый угол
-public:
-    Quadrilateral(int a, int b, int c, int d, int A, int B, int C, int D);
-    int get_d();
-    int get_D();
-};
 
 /**
  * @brief класс треугольника
  */
 class Triangle : public Figure {
  public:
-  Triangle(int a, int b, int c, int A, int B, int C) : Figure(a, b, c, A, B, C){};
+     Triangle(int a, int b, int c, int A, int B, int C);
+     void print_info() const override;
 };
 
 /**
@@ -66,6 +56,20 @@ public:
 class EquilateralTriangle : public Triangle {
 public:
     EquilateralTriangle(int a) : Triangle(a, a, a, 60, 60, 60) {};
+};
+
+
+/**
+ * @brief класс четырёхугольника
+ */
+class Quadrilateral : public Figure {
+protected:
+    int d;      ///< четвёртая сторона
+    int D;      ///< четвёртый угол
+public:
+    Quadrilateral(int a, int b, int c, int d, int A, int B, int C, int D);
+    int get_d() const;
+    int get_D() const;
 };
 
 /**
@@ -100,43 +104,22 @@ public:
     Rhomb(int a, int A, int B) : Quadrilateral(a, a, a, a, A, B, A, B) {};
 };
 
-void print_info(Figure* lFigure) {
-    std::cout << "Стороны: a=" << lFigure->get_a() 
-              << " b=" << lFigure->get_b() 
-              << " c=" << lFigure->get_c();
-    
-    // Проверяем, является ли фигура четырёхугольником
-    if (Quadrilateral* quad = dynamic_cast<Quadrilateral*>(lFigure)) {
-        std::cout << " d=" << quad->get_d();
-    }
-    
-    std::cout << std::endl;
-    
-    std::cout << "Углы: A=" << lFigure->get_A() 
-              << " B=" << lFigure->get_B() 
-              << " C=" << lFigure->get_C();
-    
-    if (Quadrilateral* quad = dynamic_cast<Quadrilateral*>(lFigure)) {
-        std::cout << " D=" << quad->get_D();
-    }
-    
-    std::cout << "\n\n";
-}
-
 int main() {
   SetConsoleCP(1251);
   SetConsoleOutputCP(1251);
 
   Triangle newTriangle(10, 20, 30, 50, 60, 70);
-  RightAngTriangle newRightAngledTriangle(10, 20, 30, 50, 60);
-  IsoscelesTriangle newIsoscelesTriangle(10, 20, 50, 60);
-  EquilateralTriangle newEquilateralTriangle(30);
-  Quadrilateral newQuadrilateral(10, 20, 30, 40, 50, 60, 70, 80);
-  FRectangle newFRectangle(10, 20);
-  Square newSquare(20);
-  Parallelogram newParallelogram(20, 30, 30, 40);
-  Rhomb newRhomb(30, 30, 40);
+  //RightAngTriangle newRightAngledTriangle(10, 20, 30, 50, 60);
+  //IsoscelesTriangle newIsoscelesTriangle(10, 20, 50, 60);
+  //EquilateralTriangle newEquilateralTriangle(30);
+  //Quadrilateral newQuadrilateral(10, 20, 30, 40, 50, 60, 70, 80);
+  //FRectangle newFRectangle(10, 20);
+  //Square newSquare(20);
+  //Parallelogram newParallelogram(20, 30, 30, 40);
+  //Rhomb newRhomb(30, 30, 40);
 
+  
+  /*
   std::cout << "Треугольник: " << std::endl;
   print_info(&newTriangle);
   
@@ -163,6 +146,7 @@ int main() {
 
   std::cout << "Ромб:" << std::endl;
   print_info(&newRhomb);
+  */
 
   return EXIT_SUCCESS;
 }
@@ -177,38 +161,51 @@ Figure::Figure(int a, int b, int c, int A, int B, int C) {
   name = "Фигура";
 }
 
-std::string Figure::get_name() {
+std::string Figure::get_name() const{
     return name;
 }
+
+Triangle::Triangle(int a, int b, int c, int A, int B, int C) : Figure(a, b, c, A, B, C) {
+    name = "Треугольник";
+}
+
+void Triangle::print_info() const {
+    std::cout << get_name() << ": " << std::endl;
+    std::cout << "Стороны: a=" << get_a()
+        << " b=" << get_b()
+        << " c=" << get_c();
+}
+
 
 Quadrilateral::Quadrilateral(int a, int b, int c, int d, int A, int B, int C, int D) : Figure(a, b, c, A, B, C) {
   this->d = d;
   this->D = D;
+  this->name = "Четырехугольник";
 }
 
-int Figure::get_a() {
+int Figure::get_a() const {
   return a;
 }
-int Figure::get_b() {
+int Figure::get_b() const {
   return b;
 }
-int Figure::get_c() {
+int Figure::get_c() const {
   return c;
 }
-int Figure::get_A() {
+int Figure::get_A() const {
   return A;
 }
-int Figure::get_B() {
+int Figure::get_B() const {
   return B;
 }
-int Figure::get_C() {
+int Figure::get_C() const {
   return C;
 }
 
-int Quadrilateral::get_d() {
+int Quadrilateral::get_d() const {
     return d;
 }
 
-int Quadrilateral::get_D() {
+int Quadrilateral::get_D() const {
     return D;
 }
