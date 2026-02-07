@@ -31,7 +31,7 @@ int main() {
       std::cout << " минус ";
       std::cout << y;
       std::cout << " = ";
-      std::cout << newCalc.division(x, y);
+      std::cout << newCalc.subtraction(x, y);
       break;
     case 3:
       std::cout << x;
@@ -59,4 +59,5 @@ int main() {
       break;
   }
 
+  return EXIT_SUCCESS;
 }

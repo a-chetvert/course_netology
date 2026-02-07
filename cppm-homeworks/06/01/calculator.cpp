@@ -1,5 +1,6 @@
 #include "calculator.h"
 #include <iostream>
+#include <cmath>
 
 /// @brief сложение
 /// @param x операнд
