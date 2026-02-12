@@ -44,7 +44,12 @@ int main() {
 		try {
 			length = function(str, forbidden_length);
 		}
+#if DECISION_TYPE == DECISION_SIMPLE
+		catch (const MyException& e) {
+#endif
+#if DECISION_TYPE == DECISION_DOMAIN
 		catch (const std::exception& e) {
+#endif
 			std::cout << e.what() << std::endl;
 			return EXIT_FAILURE;
 		}
