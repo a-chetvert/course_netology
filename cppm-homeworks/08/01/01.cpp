@@ -5,12 +5,33 @@
 #include <windows.h>
 #include <iostream>
 #include <string>
+#include <exception>
+
+// расскомментировать для использования SetConsole..()
+//#define USE_SET_CONSOLE
+
+#define DECISION_SIMPLE 0
+#define DECISION_DOMAIN 1
+// выбор типа решения
+#define DECISION_TYPE DECISION_SIMPLE
+
+#if DECISION_TYPE == DECISION_SIMPLE
+class MyException : public std::exception {
+public:
+	const char* what() const override {
+		return "Вы ввели слово запретной длины! До свидания";
+	}
+};
+#endif
 
 int function(std::string str, int forbidden_length);
 
 int main() {
+#ifdef USE_SET_CONSOLE
 	 SetConsoleCP(1251);
 	 SetConsoleOutputCP(1251);
+#endif 
+
 	int forbidden_length{0};
 	int length{ 0 };
 	std::string str{""};
@@ -23,8 +44,8 @@ int main() {
 		try {
 			length = function(str, forbidden_length);
 		}
-		catch (...) {
-			std::cout << "Вы ввели слово запретной длины! До свидания" << std::endl;
+		catch (const std::exception& e) {
+			std::cout << e.what() << std::endl;
 			return EXIT_FAILURE;
 		}
 		std::cout << "Длина слова \"" << str <<"\" равна " << length << std::endl;
@@ -43,7 +64,13 @@ int main() {
 int function(std::string str, int forbidden_length) {
 	int lenght = static_cast<int>(str.length()); 
 	if (lenght == forbidden_length) {
-		throw "bad_length";
+#if DECISION_TYPE == DECISION_SIMPLE
+		throw MyException();
+#endif
+#if DECISION_TYPE == DECISION_DOMAIN
+		throw std::domain_error("Вы ввели слово запретной длины! До свидания");
+#endif
+
 	}
 	else return lenght;
 }
