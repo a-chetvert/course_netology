@@ -1,0 +1,9 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Элементы решения/" />
+  <Project Path="02.vcxproj" Id="cc6258b1-c66d-44cd-af1b-88002bda04ec" />
+  <Project Path="frstDLL/frstDLL.vcxproj" Id="36c181e5-368a-428a-858a-9faadff44dd4" />
+</Solution>

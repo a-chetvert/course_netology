@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="frstDLL.vcxproj" Id="36c181e5-368a-428a-858a-9faadff44dd4" />
+</Solution>
