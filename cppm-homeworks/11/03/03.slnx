@@ -1,0 +1,8 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="03.vcxproj" Id="469019b9-7f0f-4459-b771-0677da913a05" />
+  <Project Path="mydynlib/mydynlib.vcxproj" Id="d9e54789-79f7-4193-8ba7-6c3fa9b32006" />
+</Solution>

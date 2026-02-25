@@ -1,0 +1,8 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="../mydynlib/mydynlib.vcxproj" />
+  <Project Path="application.vcxproj" />
+</Solution>
