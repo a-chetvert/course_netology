@@ -44,7 +44,7 @@ public:
 		return sum / _size;
 	}
 
-	/// @brief mean (перегрузка по заданию 2)
+	/// @brief mean СЃСЂРµРґРЅРµРµ Р°СЂРёС„Рј
 	double mean(int numFirst,  int numSecond)
 	{
 		if (extended_array.empty()) 
@@ -54,11 +54,11 @@ public:
 		if (numFirst > numSecond)
 			throw std::invalid_argument("numFirst > numSecond");
 		double sum = 0;
-		for (size_t i = numFirst; i < numSecond; i++)
+		for (size_t i = numFirst; i <= numSecond; i++)
 		{
 			sum += extended_array[i];
 		}
-		return sum / (numSecond - numFirst);
+		return sum / (numSecond - numFirst + 1);
 	}
 
 	double median()

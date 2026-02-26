@@ -13,7 +13,7 @@
 int main()
 {
 	ExtArray<int> v0{ 2, 4, 6, 8 };
-	std::cout << "Res " <<  v0.mean(0, 1) << "\n" ;
+	std::cout << "Res " <<  v0.mean(0, 2) << "\n" ;
 
 	system("pause");
 	return EXIT_SUCCESS;
