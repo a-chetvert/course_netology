@@ -8,9 +8,13 @@
  */
 #include <iostream>
 #include "extended_array.h"
-
+#include <windows.h>
 
 int main()
 {
+	ExtArray<int> v0{ 2, 4, 6, 8 };
+	std::cout << "Res " <<  v0.mean(0, 1) << "\n" ;
+
+	system("pause");
 	return EXIT_SUCCESS;
 }

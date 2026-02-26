@@ -34,7 +34,8 @@ public:
 
 	double mean()
 	{
-		if (extended_array.empty()) return 0;
+		if (extended_array.empty()) 
+			return 0;
 		double sum = 0;
 		for (size_t i = 0; i < _size; i++)
 		{
@@ -43,9 +44,15 @@ public:
 		return sum / _size;
 	}
 
+	/// @brief mean (перегрузка по заданию 2)
 	double mean(int numFirst,  int numSecond)
 	{
-		if (extended_array.empty()) return 0;
+		if (extended_array.empty()) 
+			return 0;
+		if (numFirst == numSecond)
+			throw std::invalid_argument("numFirst == numSecond");
+		if (numFirst > numSecond)
+			throw std::invalid_argument("numFirst > numSecond");
 		double sum = 0;
 		for (size_t i = numFirst; i < numSecond; i++)
 		{
