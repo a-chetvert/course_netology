@@ -23,6 +23,7 @@
     <ClCompile Include="..\lib\race\src\Race.cpp" />
     <ClCompile Include="..\lib\transport\AirTransport.cpp" />
     <ClCompile Include="..\lib\transport\Broom.cpp" />
+    <ClCompile Include="..\lib\transport\Camel.cpp" />
     <ClCompile Include="..\lib\transport\CarpetPlane.cpp" />
     <ClCompile Include="..\lib\transport\Eagle.cpp" />
     <ClCompile Include="..\lib\transport\GndTransport.cpp" />
@@ -32,6 +33,7 @@
     <ClInclude Include="..\lib\race\inc\Race.h" />
     <ClInclude Include="..\lib\transport\AirTransport.h" />
     <ClInclude Include="..\lib\transport\Broom.h" />
+    <ClInclude Include="..\lib\transport\Camel.h" />
     <ClInclude Include="..\lib\transport\CarpetPlane.h" />
     <ClInclude Include="..\lib\transport\Eagle.h" />
     <ClInclude Include="..\lib\transport\GndTransport.h" />

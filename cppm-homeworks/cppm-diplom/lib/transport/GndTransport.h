@@ -6,8 +6,9 @@ class GndTransport :
 protected:
     int timeBeforeRest; 
 
-public:
     virtual double calcRestTime(int restCount) const = 0;
-
+public:
+    GndTransport(std::string name, int speed);
+    virtual double calcTime(int distance) const;
 };
 
