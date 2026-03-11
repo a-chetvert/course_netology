@@ -1,14 +1,13 @@
 #pragma once
 #include "AirTransport.h"
+#include "LibApi.h"
 
-
-
-class CarpetPlane :
+class  CarpetPlane :
     public AirTransport
 {
   double getDistanceReduction(int distance) const override;
 public:
-  CarpetPlane();
+  TRANSPORTRACE_API CarpetPlane();
   //double calcTime(int distance) const override;
 
 };

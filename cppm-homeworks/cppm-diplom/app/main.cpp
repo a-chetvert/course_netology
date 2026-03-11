@@ -1,8 +1,9 @@
 #include <iostream>
-#include "Eagle.h"
+#include "Transport.h"
+#include "Camel.h"
 
 int main()
 {
-    Eagle eagle;
-    std::cout << "Hello World!\n";
+    Camel camel;
+    std::cout << "Hello World," << camel.getName() << "test" << "\n";
 }

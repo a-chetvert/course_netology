@@ -1,5 +1,6 @@
 #pragma once
 #include "AirTransport.h"
+#include "LibApi.h"
 
 class Eagle :
   public AirTransport
@@ -10,6 +11,6 @@ protected:
   // как лучше сделать?
   double getDistanceReduction(int distance) const override;
 public:
-  Eagle();
-  double calcTime(int distance) const override;
+  TRANSPORTRACE_API Eagle();
+  TRANSPORTRACE_API double calcTime(int distance) const override;
 };

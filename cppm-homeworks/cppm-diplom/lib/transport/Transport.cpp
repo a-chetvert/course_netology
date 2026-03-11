@@ -1,13 +1,9 @@
 #include "Transport.h"
 
-//Transport::Transport(std::string name, int speed) {
-//	this->name = name;
-//	this->speed = speed;
-//}
+Transport::Transport(std::string name, int speed) : name(name), speed(speed) {};
 
-
-std::string Transport::getName() const
+const std::string Transport::getName() const
 {
-	return std::string();
+	return name;
 }
 

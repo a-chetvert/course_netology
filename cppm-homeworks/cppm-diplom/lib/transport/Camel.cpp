@@ -10,7 +10,17 @@ const int TIME_BEFORE_REST_CAMEL = 30;
 
 double Camel::calcRestTime(int restCount) const
 {
+  double time{0};
+  // если не требуется отдых
+  if(restCount == 0)
     return 0.0;
+  else{
+    time = 5;
+    if (restCount > 1) {
+      time += (restCount - 1) * 8;
+    }
+    return time;
+  }
 }
 
 Camel::Camel() : GndTransport(NAME_CAMEL_EN, SPEED_CAMEL)

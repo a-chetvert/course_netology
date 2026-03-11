@@ -3,6 +3,7 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Project Path="../test/test.vcxproj" Id="c03ec658-b14a-4929-94de-c18edbcf659d" />
   <Project Path="msvc.vcxproj" Id="e33a6efe-9549-4fd4-b1a6-b6b3f20ec22a" />
-  <Project Path="tests.vcxproj" Id="4b4c62cf-8640-43f0-9f3c-d68f1dc4c4bd" />
+  <Project Path="transportRace.vcxproj" Id="a2880177-706e-4954-a14d-593f8b632c5d" />
 </Solution>

@@ -1,14 +1,16 @@
 #pragma once
 #include "Transport.h"
-class GndTransport :
+#include "LibApi.h"
+
+class  GndTransport :
     public Transport
 {
 protected:
     int timeBeforeRest; 
 
-    virtual double calcRestTime(int restCount) const = 0;
+    virtual double calcRestTime(const int restCount) const = 0;
 public:
-    GndTransport(std::string name, int speed);
-    virtual double calcTime(int distance) const;
+    TRANSPORTRACE_API GndTransport(std::string name, int speed);
+    TRANSPORTRACE_API virtual double calcTime(int distance) const;
 };
 

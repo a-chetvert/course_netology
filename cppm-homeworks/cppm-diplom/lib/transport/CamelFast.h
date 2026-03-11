@@ -2,11 +2,11 @@
 #include "GndTransport.h"
 #include "LibApi.h"
 
-class Camel :
-    public GndTransport
+class CamelFast :
+  public GndTransport
 {
   double calcRestTime(int restCount) const override;
 public:
-  TRANSPORTRACE_API Camel();
+  TRANSPORTRACE_API CamelFast();
 };
 

@@ -6,6 +6,9 @@ GndTransport::GndTransport(std::string name, int speed)
 }
 double GndTransport::calcTime(int distance) const
 {
-	return 0.0;
+  double timeWithoutRest = distance / speed;
+  int countRest = static_cast<int>(timeWithoutRest) / timeBeforeRest;
+  double time = calcRestTime(countRest) + timeWithoutRest;
+  return time;
 }
 ;
