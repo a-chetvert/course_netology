@@ -7,6 +7,8 @@
 #include "Broom.h"
 #include "Camel.h"
 #include "CamelFast.h"
+#include "Centaur.h"
+#include "BootsAllTerrain.h"
 TEST(TestAir, Eagle) {
   Eagle eagle;
 
@@ -63,17 +65,20 @@ TEST(TestGnd, CamelFast) {
   EXPECT_DOUBLE_EQ(expectedTime, camelFast.calcTime(distance));
 }
 
-/*
 TEST(TestGnd, Centaur) {
   Centaur Centaur;
 
-  int distance = 1600;
-  // 45км / 40км/ч = 40,25ч
-  // 40,25ч соответствет 4 перерывам
-  // 5+6,55+2*8 =27,5
-  double expectedTime = 67.5;
+  int distance = 4500;
+  double expectedTime = 374;
 
   EXPECT_DOUBLE_EQ(expectedTime, Centaur.calcTime(distance));
 }
 
-*/
+TEST(TestGnd, BootsAllTerrain) {
+  BootsAllTerrain bootsAllTerrain;
+
+  int distance = 4500;
+  double expectedTime = 815;
+
+  EXPECT_DOUBLE_EQ(expectedTime, bootsAllTerrain.calcTime(distance));
+}

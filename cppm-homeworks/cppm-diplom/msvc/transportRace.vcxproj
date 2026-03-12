@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\lib\transport\AirTransport.cpp" />
+    <ClCompile Include="..\lib\transport\BootsAllTerrain.cpp" />
     <ClCompile Include="..\lib\transport\Broom.cpp" />
     <ClCompile Include="..\lib\transport\Camel.cpp" />
     <ClCompile Include="..\lib\transport\CamelFast.cpp" />
@@ -31,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\lib\transport\AirTransport.h" />
+    <ClInclude Include="..\lib\transport\BootsAllTerrain.h" />
     <ClInclude Include="..\lib\transport\Broom.h" />
     <ClInclude Include="..\lib\transport\Camel.h" />
     <ClInclude Include="..\lib\transport\CamelFast.h" />
@@ -39,6 +41,7 @@
     <ClInclude Include="..\lib\transport\Eagle.h" />
     <ClInclude Include="..\lib\transport\GndTransport.h" />
     <ClInclude Include="..\lib\transport\LibApi.h" />
+    <ClInclude Include="..\lib\transport\RaceType.h" />
     <ClInclude Include="..\lib\transport\Transport.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
