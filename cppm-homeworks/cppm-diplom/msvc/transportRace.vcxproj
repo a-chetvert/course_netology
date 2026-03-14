@@ -28,6 +28,7 @@
     <ClCompile Include="..\lib\transport\Centaur.cpp" />
     <ClCompile Include="..\lib\transport\Eagle.cpp" />
     <ClCompile Include="..\lib\transport\GndTransport.cpp" />
+    <ClCompile Include="..\lib\transport\Race.cpp" />
     <ClCompile Include="..\lib\transport\Transport.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -41,6 +42,7 @@
     <ClInclude Include="..\lib\transport\Eagle.h" />
     <ClInclude Include="..\lib\transport\GndTransport.h" />
     <ClInclude Include="..\lib\transport\LibApi.h" />
+    <ClInclude Include="..\lib\transport\Race.h" />
     <ClInclude Include="..\lib\transport\RaceType.h" />
     <ClInclude Include="..\lib\transport\Transport.h" />
   </ItemGroup>

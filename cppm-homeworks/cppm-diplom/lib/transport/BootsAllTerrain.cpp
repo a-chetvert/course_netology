@@ -27,7 +27,7 @@ double BootsAllTerrain::calcRestTime(int restCount) const
   }
 }
 
-BootsAllTerrain::BootsAllTerrain() 
+BootsAllTerrain::BootsAllTerrain()
   : GndTransport(NAME_BOOTS_EN, SPEED_BOOTS)
 {
   timeBeforeRest = TIME_BEFORE_REST_BOOTS;

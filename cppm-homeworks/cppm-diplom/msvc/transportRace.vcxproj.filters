@@ -45,6 +45,9 @@
     <ClCompile Include="..\lib\transport\BootsAllTerrain.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="..\lib\transport\Race.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\lib\transport\AirTransport.h">
@@ -81,6 +84,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="..\lib\transport\RaceType.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\transport\Race.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
