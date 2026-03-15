@@ -16,11 +16,9 @@ protected:
 	int speed;
 
 public:
-	// хочу сделать конструктор отдельно, чтобы в дальнейшем мог добавить throw
-	// но при использовании - выскакивают ошибки
-	// LNK2001. LNK2019, LNK1120
 	TRANSPORTRACE_API Transport(std::string name, int speed);
 	TRANSPORTRACE_API const std::string getName() const;
 	TRANSPORTRACE_API virtual double calcTime(int distance) const = 0;
+	TRANSPORTRACE_API virtual bool isGnd() const = 0;
 };
 

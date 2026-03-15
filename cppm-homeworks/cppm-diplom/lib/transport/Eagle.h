@@ -12,5 +12,4 @@ protected:
   double getDistanceReduction(int distance) const override;
 public:
   TRANSPORTRACE_API Eagle();
-  TRANSPORTRACE_API double calcTime(int distance) const override;
 };

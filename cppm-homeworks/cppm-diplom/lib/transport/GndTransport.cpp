@@ -6,9 +6,15 @@ GndTransport::GndTransport(std::string name, int speed)
 }
 double GndTransport::calcTime(int distance) const
 {
-  double timeWithoutRest = distance / speed;
+  /// @brief время в пути без остановок
+  double timeWithoutRest = static_cast<double>(distance) / speed; 
+
   int countRest = static_cast<int>(timeWithoutRest) / timeBeforeRest;
   double time = calcRestTime(countRest) + timeWithoutRest;
   return time;
+}
+TRANSPORTRACE_API bool GndTransport::isGnd() const
+{
+  return true;
 }
 ;

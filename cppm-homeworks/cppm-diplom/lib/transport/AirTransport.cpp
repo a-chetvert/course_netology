@@ -11,4 +11,9 @@ double AirTransport::calcTime(int distance) const
   double time = distance * (1 - getDistanceReduction(distance)) / speed;
   return time;
 }
+
+bool AirTransport::isGnd() const
+{
+  return false;
+}
 ;

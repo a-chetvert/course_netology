@@ -18,13 +18,12 @@ double Camel::calcRestTime(int restCount) const
   // если не требуется отдых
   if(restCount == 0)
     return 0.0;
-  else{
-    time = TIME_1ST_REST_CAMEL;
-    if (restCount > 1) {
-      time += (restCount - 1) * TIME_OTH_REST_CAMEL;
-    }
-    return time;
+  
+  time = TIME_1ST_REST_CAMEL;
+  if (restCount > 1) {
+    time += (restCount - 1) * TIME_OTH_REST_CAMEL;
   }
+  return time;
 }
 
 Camel::Camel() 

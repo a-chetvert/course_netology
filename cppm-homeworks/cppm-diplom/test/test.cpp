@@ -9,6 +9,8 @@
 #include "CamelFast.h"
 #include "Centaur.h"
 #include "BootsAllTerrain.h"
+#include "Race.h"
+
 TEST(TestAir, Eagle) {
   Eagle eagle;
 
@@ -81,4 +83,19 @@ TEST(TestGnd, BootsAllTerrain) {
   double expectedTime = 815;
 
   EXPECT_DOUBLE_EQ(expectedTime, bootsAllTerrain.calcTime(distance));
+}
+
+TEST(TestRace, getDistance) {
+  int distance = 4500;
+  Race race(distance, RaceType::air);
+
+  EXPECT_DOUBLE_EQ(distance, race.getDistance());
+}
+
+TEST(TestRace, getRaceType) {
+  
+  int distance = 4500;
+  Race race(distance, RaceType::air);
+
+  EXPECT_EQ(RaceType::air, race.getRaceType());
 }

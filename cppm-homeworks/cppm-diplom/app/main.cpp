@@ -27,19 +27,51 @@ int main()
       }
     }
 
-    std::cout << "\nУкажите длину дистанции (должна быть положительна): ";
-    std::cin >> distance;
-    if (distance > 0) {
-      Race race(distance, raceType);
+    while (true) {
+      std::cout << "\nУкажите длину дистанции (должна быть положительна): ";
+      std::cin >> distance;
+      if (distance > 0) {
+        break;
+      }
+      else {
+        std::cout << "\nДлина не положительна. Попробуйте снова:";
+      }
     }
+
+    Race race(distance, raceType);
 
     while (true)
     {
       std::cout << "\nДолжно быть зарегистрировано хотя бы 2 транспортных средства\n \
         1. Зарегистрировать транспорт\n \
-        Выберите действие : ";
+        Выберите действие: ";
       int action;
       std::cin >> action;
+      if (action == 1) break;
+    }
+
+    std::cout << "\nГонка для ";
+    switch (race.getRaceType()) {
+    case RaceType::all:
+      std::cout << "наземного и воздушного";
+      break;
+    case RaceType::air:
+      std::cout << "воздушного";
+      break;
+    case RaceType::gnd:
+      std::cout << "наземного";
+      break;
+    }
+    std::cout << " транспорта. Расстояние: " << race.getDistance() << std::endl;
+
+
+    // Повтор или выход
+    std::cout << "\n1. Провести ещё одну гонку\n2. Выйти\nВыберите действие: ";
+    int choice;
+    std::cin >> choice;
+    if (choice == 2)
+    {
+      break;
     }
   }
 
