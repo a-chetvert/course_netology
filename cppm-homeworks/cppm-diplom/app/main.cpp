@@ -1,69 +1,67 @@
 #include <iostream>
+#include <vector>
 #include "Transport.h"
 #include "Camel.h"
+#include "CamelFast.h"
 #include "Race.h"
+#include "Centaur.h"
+#include "BootsAllTerrain.h"
+#include "Eagle.h"
+#include "CarpetPlane.h"
+#include "Broom.h"
+#include "ConsoleUI.h"
 
 int main()
 {
   RaceType raceType{ 0 };
-  int tmp{ 0 };
+  int typeChoice{ 0 };
   double distance;
+
+  Camel camel;
+  CamelFast camelFast;
+  Centaur centaur;
+  BootsAllTerrain boots;
+  Eagle eagle;
+  CarpetPlane carpet;
+  Broom broom;
+
+  std::vector<Transport*> allTransport = {
+    &boots, &broom, &camel, &centaur, &eagle, &camelFast, &carpet
+  };
+
+  int action{0}; ///< действие (1 - регистрация ТС)
 
   std::cout << "Добро пожаловать в гоночный симулятор!\n";
 
   while (true)
   {
-    while (true)
-    {
-      std::cout << "1. Гонка для наземного транспорта\n2. Гонка для воздушного транспорта \
-        \n3. Гонка для наземного и воздушного транспорта\nВыберите тип гонки: ";
-      std::cin >> tmp;
-      if (tmp > 0 && tmp <= 3) {
-        raceType = static_cast<RaceType>(tmp);
-        break;
-      }
-      else {
-        std::cout << "\nНеверный номер! Введите 1, 2 или 3.\n";
-      }
-    }
+    printMenu();
+    // Выбор типа гонки
+    raceType = chooseRaceType();
 
-    while (true) {
-      std::cout << "\nУкажите длину дистанции (должна быть положительна): ";
-      std::cin >> distance;
-      if (distance > 0) {
-        break;
-      }
-      else {
-        std::cout << "\nДлина не положительна. Попробуйте снова:";
-      }
-    }
-
+    // Ввод дистанции
+    distance = chooseDistance();
     Race race(distance, raceType);
+    
+    // Регистрация транспорта
+    registerTransports(race, allTransport);
 
-    while (true)
-    {
-      std::cout << "\nДолжно быть зарегистрировано хотя бы 2 транспортных средства\n \
-        1. Зарегистрировать транспорт\n \
-        Выберите действие: ";
-      int action;
-      std::cin >> action;
-      if (action == 1) break;
+    // Проверка возможности проведения гонки
+    if (!race.canStart()) {
+      std::cout << "Недостаточно участников для гонки. Попробуйте снова.\n";
+      continue;
     }
 
-    std::cout << "\nГонка для ";
-    switch (race.getRaceType()) {
-    case RaceType::all:
-      std::cout << "наземного и воздушного";
-      break;
-    case RaceType::air:
-      std::cout << "воздушного";
-      break;
-    case RaceType::gnd:
-      std::cout << "наземного";
-      break;
-    }
-    std::cout << " транспорта. Расстояние: " << race.getDistance() << std::endl;
+    race.start();
 
+    std::cout << "Результаты гонки:\n";
+    int index{ 1 };
+    std::vector <std::string> result2print = race.getResult();
+    for (const auto& oneTs : result2print) {
+      std::cout << "\n" << index++ << ". " << oneTs;
+    }
+
+    std::cout << "\n";
 
     // Повтор или выход
     std::cout << "\n1. Провести ещё одну гонку\n2. Выйти\nВыберите действие: ";
@@ -74,6 +72,4 @@ int main()
       break;
     }
   }
-
-
 }

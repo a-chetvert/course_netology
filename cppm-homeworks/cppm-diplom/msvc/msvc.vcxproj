@@ -19,12 +19,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\app\ConsoleUI.cpp" />
     <ClCompile Include="..\app\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="transportRace.vcxproj">
       <Project>{a2880177-706e-4954-a14d-593f8b632c5d}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\app\ConsoleUI.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>

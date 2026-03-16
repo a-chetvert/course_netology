@@ -1,8 +1,6 @@
 #include "Camel.h"
 
-#define NAME_CAMEL_RU "Верблюд"
-#define NAME_CAMEL_EN "Camel"
-
+const char* NAME_CAMEL_RU = "Верблюд";
 // скорость верблюда
 const int SPEED_CAMEL = 10;
 // время движения до отдыха
@@ -27,7 +25,7 @@ double Camel::calcRestTime(int restCount) const
 }
 
 Camel::Camel() 
-  : GndTransport(NAME_CAMEL_EN, SPEED_CAMEL)
+  : GndTransport(NAME_CAMEL_RU, SPEED_CAMEL)
 {
   timeBeforeRest = TIME_BEFORE_REST_CAMEL;
 }

@@ -1,8 +1,7 @@
 #include "BootsAllTerrain.h"
 
-#define NAME_BOOTS_RU "Ботинки-вездеходы"
-#define NAME_BOOTS_EN "Boots all-terrain"
-
+// имя BootsAllTerrain
+const char* NAME_BOOTS_RU = "Ботинки-вездеходы";
 // скорость ботинок
 const int SPEED_BOOTS = 6;
 // время движения до отдыха
@@ -28,7 +27,7 @@ double BootsAllTerrain::calcRestTime(int restCount) const
 }
 
 BootsAllTerrain::BootsAllTerrain()
-  : GndTransport(NAME_BOOTS_EN, SPEED_BOOTS)
+  : GndTransport(NAME_BOOTS_RU, SPEED_BOOTS)
 {
   timeBeforeRest = TIME_BEFORE_REST_BOOTS;
 }

@@ -15,5 +15,4 @@ double AirTransport::calcTime(int distance) const
 bool AirTransport::isGnd() const
 {
   return false;
-}
-;
+};

@@ -1,8 +1,6 @@
 #include "Centaur.h"
 
-#define NAME_CENTAUR_RU "Кентавр"
-#define NAME_CENTAUR_EN "Centaur"
-
+const char* NAME_CENTAUR_RU = "Кентавр";
 // скорость кентавра
 const int SPEED_CENTAUR = 15;
 // время движения до отдыха
@@ -15,7 +13,7 @@ double Centaur::calcRestTime(int restCount) const
   return time;
 }
 
-Centaur::Centaur() : GndTransport(NAME_CENTAUR_EN, SPEED_CENTAUR)
+Centaur::Centaur() : GndTransport(NAME_CENTAUR_RU, SPEED_CENTAUR)
 {
   timeBeforeRest = TIME_BEFORE_REST_CENTAUR;
 }
