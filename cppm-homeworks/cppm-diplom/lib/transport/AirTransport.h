@@ -10,5 +10,6 @@ protected:
 public:
   TRANSPORTRACE_API AirTransport(std::string name, int speed);
   TRANSPORTRACE_API virtual double calcTime(int distance) const;
-  TRANSPORTRACE_API bool isGnd() const override;
+
+  TRANSPORTRACE_API TransportType getType() const override;
 };

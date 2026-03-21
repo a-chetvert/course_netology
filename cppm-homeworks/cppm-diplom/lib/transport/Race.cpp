@@ -7,9 +7,9 @@ bool Race::isSuitableType(Transport* transport) const
   case RaceType::all:
     return true;
   case RaceType::air:
-    return !(transport->isGnd()); 
+    return (transport->getType() == TransportType::AIR);
   case RaceType::gnd:
-    return transport->isGnd();
+    return (transport->getType() == TransportType::GND);
   default:
     return false;
   }
@@ -40,6 +40,7 @@ std::vector<std::string> Race::getResult() const
     stringsResult.push_back(tmp);
   }
   return stringsResult;
+
 };
 
 double Race::getDistance() const {

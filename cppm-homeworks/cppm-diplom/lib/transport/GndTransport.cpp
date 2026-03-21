@@ -4,6 +4,7 @@ GndTransport::GndTransport(std::string name, int speed)
 	: Transport(name, speed)
 {
 }
+
 double GndTransport::calcTime(int distance) const
 {
   /// @brief время в пути без остановок
@@ -13,8 +14,8 @@ double GndTransport::calcTime(int distance) const
   double time = calcRestTime(countRest) + timeWithoutRest;
   return time;
 }
-TRANSPORTRACE_API bool GndTransport::isGnd() const
+
+TRANSPORTRACE_API TransportType GndTransport::getType() const
 {
-  return true;
-}
-;
+  return TransportType::GND;
+};

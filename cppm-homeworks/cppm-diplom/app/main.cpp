@@ -14,22 +14,18 @@
 int main()
 {
   RaceType raceType{ 0 };
-  int typeChoice{ 0 };
   double distance;
 
-  Camel camel;
-  CamelFast camelFast;
-  Centaur centaur;
-  BootsAllTerrain boots;
-  Eagle eagle;
-  CarpetPlane carpet;
-  Broom broom;
+  // количество видов транспорта
+  size_t totalTransports{ 0 };
+  //вызываем фабрику для создания списка обьектов
+  Transport** transportsAll = makeTransports(totalTransports);
 
-  std::vector<Transport*> allTransport = {
-    &boots, &broom, &camel, &centaur, &eagle, &camelFast, &carpet
-  };
-
-  int action{0}; ///< действие (1 - регистрация ТС)
+  // Создаем вектор для удобства работы с UI
+  std::vector<Transport*> allTransport;
+  for (size_t i = 0; i < totalTransports; ++i) {
+    allTransport.push_back(transportsAll[i]);
+  }
 
   std::cout << "Добро пожаловать в гоночный симулятор!\n";
 
@@ -72,4 +68,12 @@ int main()
       break;
     }
   }
+
+  //освобождаем память
+  for (int i = 0; i < totalTransports; i++)
+  {
+    delete transportsAll[i];
+  }
+  delete[] transportsAll;
+  return EXIT_SUCCESS;
 }

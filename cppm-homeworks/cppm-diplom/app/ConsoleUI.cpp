@@ -89,8 +89,8 @@ void registerTransports(Race& race, const std::vector<Transport*>& allTransport)
 
     if (action >= 1 && action <= static_cast<int>(allTransport.size())) {
       if (race.registerTransport(allTransport[action - 1])) {
-        std::cout << allTransport[action - 1]->getName()
-          << " успешно зарегистрирован.\n";
+        std::cout << "Успешно зарегистрированный транспорт: "
+          << allTransport[action - 1]->getName() << "\n";
       }
       else {
         std::cout << "Ошибка: неподходящий тип или уже зарегистрирован.\n";

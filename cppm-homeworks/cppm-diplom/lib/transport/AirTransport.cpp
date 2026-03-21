@@ -12,7 +12,7 @@ double AirTransport::calcTime(int distance) const
   return time;
 }
 
-bool AirTransport::isGnd() const
+TransportType AirTransport::getType() const
 {
-  return false;
-};
+  return TransportType::AIR;
+}

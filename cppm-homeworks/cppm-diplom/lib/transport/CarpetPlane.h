@@ -8,7 +8,4 @@ class  CarpetPlane :
   double getDistanceReduction(int distance) const override;
 public:
   TRANSPORTRACE_API CarpetPlane();
-  //double calcTime(int distance) const override;
-
 };
-
