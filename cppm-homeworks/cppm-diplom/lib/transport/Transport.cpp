@@ -1,53 +1,53 @@
-#include <vector>
+
 #include "Transport.h"
+
+#include "BootsAllTerrain.h"
+#include "Broom.h"
 #include "Camel.h"
 #include "CamelFast.h"
-#include "Centaur.h"
-#include "BootsAllTerrain.h"
-#include "Eagle.h"
 #include "CarpetPlane.h"
-#include "Broom.h"
+#include "Centaur.h"
+#include "Eagle.h"
 
 /**
  * @brief Конструктор транспортного средства
  * @param[in] name Название транспорта
  * @param[in] speed Cкорость
  */
-Transport::Transport(std::string name, int speed)
-  : name(name), speed(speed) { };
+Transport::Transport(std::string name, int speed) : name(name), speed(speed) {};
 
-const std::string Transport::getName() const
-{
-	return name;
+/**
+ * @brief метод, возвращающий имя транспорта
+ * @return std::string содержащий имя транспорта
+ */
+const std::string Transport::getName() const { return name; }
+
+/**
+ * @brief функция-фабрика объектов класса Transport
+ * @return вектор указателей на объекты
+ */
+
+ /**
+  * @brief Фабричная функция для создания списка транспорта
+  * @return Вектор указателей на объекты транспорта
+  * @note Память, выделенная под объекты, должна быть 
+  * освобождена вызовом delete для каждого элемента
+  */
+std::vector<Transport*> makeTransports() {
+  std::vector<Transport*> transports;
+  transports.push_back(new Camel());
+  transports.push_back(new CamelFast());
+  transports.push_back(new Centaur());
+  transports.push_back(new BootsAllTerrain());
+  transports.push_back(new Eagle());
+  transports.push_back(new CarpetPlane());
+  transports.push_back(new Broom());
+
+  return transports;
 }
 
-Transport** makeTransports(size_t& total_transports)
-{
-	total_transports = 7; //максимальное число транспортов
-	Transport** trans_arr = new Transport * [total_transports];
-	trans_arr[0] = new Camel(); 
-	trans_arr[1] = new CamelFast();
-  trans_arr[2] = new Centaur();
-  trans_arr[3] = new BootsAllTerrain();
-  trans_arr[4] = new Eagle();
-  trans_arr[5] = new CarpetPlane();
-  trans_arr[6] = new Broom();
 
-	return trans_arr;
+TRANSPORTRACE_API void freeTransports(std::vector<Transport*> transportsToFree){
+  for (auto oneTransport : transportsToFree)
+    delete oneTransport;  
 }
-
-//std::vector<Transport*> makeTransports(size_t& total_transports)
-//{
-//  std::vector<Transport*> transports;
-//	total_transports = 7; //максимальное число транспортов
-//	Transport** trans_arr = new Transport * [total_transports];
-//	trans_arr[0] = new Camel(); 
-//	trans_arr[1] = new CamelFast();
-//  trans_arr[2] = new Centaur();
-//  trans_arr[3] = new BootsAllTerrain();
-//  trans_arr[4] = new Eagle();
-//  trans_arr[5] = new CarpetPlane();
-//  trans_arr[6] = new Broom();
-//
-//	return trans_arr;
-//}

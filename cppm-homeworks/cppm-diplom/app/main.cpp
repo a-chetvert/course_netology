@@ -1,14 +1,7 @@
 #include <iostream>
 #include <vector>
-#include "Transport.h"
-#include "Camel.h"
-#include "CamelFast.h"
+#include "Transport.h"  
 #include "Race.h"
-#include "Centaur.h"
-#include "BootsAllTerrain.h"
-#include "Eagle.h"
-#include "CarpetPlane.h"
-#include "Broom.h"
 #include "ConsoleUI.h"
 
 int main()
@@ -18,14 +11,9 @@ int main()
 
   // количество видов транспорта
   size_t totalTransports{ 0 };
-  //вызываем фабрику для создания списка обьектов
-  Transport** transportsAll = makeTransports(totalTransports);
 
-  // Создаем вектор для удобства работы с UI
-  std::vector<Transport*> allTransport;
-  for (size_t i = 0; i < totalTransports; ++i) {
-    allTransport.push_back(transportsAll[i]);
-  }
+  //вызываем фабрику для создания списка обьектов
+  std::vector<Transport*> allTransport = makeTransports();
 
   std::cout << "Добро пожаловать в гоночный симулятор!\n";
 
@@ -70,10 +58,7 @@ int main()
   }
 
   //освобождаем память
-  for (int i = 0; i < totalTransports; i++)
-  {
-    delete transportsAll[i];
-  }
-  delete[] transportsAll;
+  freeTransports(allTransport);
+
   return EXIT_SUCCESS;
 }

@@ -6,6 +6,7 @@ const double REDUCTION_EAGLE{ 0.06 };
 
 double Eagle::getDistanceReduction(int distance) const
 {
+	(void) distance;
 	return reduction;
 }
 

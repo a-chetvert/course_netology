@@ -5,6 +5,7 @@
 
 #pragma once
 #include <string>
+#include <vector>
 #include "LibApi.h"
 
 /**
@@ -31,8 +32,5 @@ public:
   TRANSPORTRACE_API virtual double calcTime(int distance) const = 0;
 };
 
-//TODO переделать комментарий!
-//Фабричная функция для создания списка доступных транспортов
-//На выходе массив транспорт и размер массива
-//перед выходом из программы необходимо самому очистить память
-TRANSPORTRACE_API Transport** makeTransports(size_t& total_transports);
+TRANSPORTRACE_API std::vector<Transport*> makeTransports();
+TRANSPORTRACE_API void freeTransports(std::vector<Transport*> transportsToFree);
