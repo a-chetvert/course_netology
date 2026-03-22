@@ -8,3 +8,4 @@ void printMenu();
 RaceType chooseRaceType();
 double chooseDistance();
 void registerTransports(Race& race, const std::vector<Transport*>& allTransport);
+bool checkRace(Race& race);

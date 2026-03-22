@@ -38,11 +38,14 @@ int main()
 
     race.start();
 
+
     std::cout << "Результаты гонки:\n";
     int index{ 1 };
-    std::vector <std::string> result2print = race.getResult();
-    for (const auto& oneTs : result2print) {
-      std::cout << "\n" << index++ << ". " << oneTs;
+    
+    std::vector<RaceResult> resultToPrint = race.getResult();
+    for (const auto& oneTs : resultToPrint) {
+      std::cout << "\n" << index++ << ". " << oneTs.transportName 
+        << ". Время: " << oneTs.time;
     }
 
     std::cout << "\n";

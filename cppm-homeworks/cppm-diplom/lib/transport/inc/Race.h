@@ -31,6 +31,6 @@ public:
   TRANSPORTRACE_API bool canStart() const;
   TRANSPORTRACE_API std::vector<std::string> getNameRacers() const;
   TRANSPORTRACE_API void start();
-  TRANSPORTRACE_API std::vector<std::string> getResult() const;
+  TRANSPORTRACE_API std::vector<RaceResult> getResult() const;
 };
 

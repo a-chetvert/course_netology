@@ -103,3 +103,12 @@ void registerTransports(Race& race, const std::vector<Transport*>& allTransport)
 
   } while (action != 0);
 }
+
+bool checkRace(Race& race){
+// Проверка возможности проведения гонки
+  if (!race.canStart()) {
+    std::cout << "Недостаточно участников для гонки. Попробуйте снова.\n";
+    return false;
+  }
+  else return true;
+}

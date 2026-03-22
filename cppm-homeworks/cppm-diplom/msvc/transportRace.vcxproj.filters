@@ -15,78 +15,78 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\lib\transport\AirTransport.cpp">
+    <ClCompile Include="..\lib\transport\src\AirTransport.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\lib\transport\Broom.cpp">
+    <ClCompile Include="..\lib\transport\src\Broom.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\lib\transport\Camel.cpp">
+    <ClCompile Include="..\lib\transport\src\Camel.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\lib\transport\CarpetPlane.cpp">
+    <ClCompile Include="..\lib\transport\src\CarpetPlane.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\lib\transport\Eagle.cpp">
+    <ClCompile Include="..\lib\transport\src\Eagle.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\lib\transport\GndTransport.cpp">
+    <ClCompile Include="..\lib\transport\src\GndTransport.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\lib\transport\Transport.cpp">
+    <ClCompile Include="..\lib\transport\src\Transport.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\lib\transport\CamelFast.cpp">
+    <ClCompile Include="..\lib\transport\src\CamelFast.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\lib\transport\Centaur.cpp">
+    <ClCompile Include="..\lib\transport\src\Centaur.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\lib\transport\BootsAllTerrain.cpp">
+    <ClCompile Include="..\lib\transport\src\BootsAllTerrain.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\lib\transport\Race.cpp">
+    <ClCompile Include="..\lib\transport\src\Race.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\lib\transport\AirTransport.h">
+    <ClInclude Include="..\lib\transport\inc\AirTransport.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\transport\Broom.h">
+    <ClInclude Include="..\lib\transport\inc\Broom.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\transport\Camel.h">
+    <ClInclude Include="..\lib\transport\inc\Camel.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\transport\CarpetPlane.h">
+    <ClInclude Include="..\lib\transport\inc\CarpetPlane.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\transport\Eagle.h">
+    <ClInclude Include="..\lib\transport\inc\Eagle.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\transport\GndTransport.h">
+    <ClInclude Include="..\lib\transport\inc\GndTransport.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\transport\Transport.h">
+    <ClInclude Include="..\lib\transport\inc\Transport.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\transport\LibApi.h">
+    <ClInclude Include="..\lib\transport\inc\LibApi.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\transport\CamelFast.h">
+    <ClInclude Include="..\lib\transport\inc\CamelFast.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\transport\Centaur.h">
+    <ClInclude Include="..\lib\transport\inc\Centaur.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\transport\BootsAllTerrain.h">
+    <ClInclude Include="..\lib\transport\inc\BootsAllTerrain.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\transport\RaceType.h">
+    <ClInclude Include="..\lib\transport\inc\RaceType.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\lib\transport\Race.h">
+    <ClInclude Include="..\lib\transport\inc\Race.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

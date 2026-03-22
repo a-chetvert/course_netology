@@ -31,16 +31,9 @@ void Race::start()
     });
 }
 
-std::vector<std::string> Race::getResult() const
+std::vector<RaceResult> Race::getResult() const
 {
-  std::vector<std::string> stringsResult;
-  std::string tmp;
-  for (const auto& oneTs : raceResult) {
-    tmp = oneTs.transportName + ".Время: " + std::to_string(oneTs.time);
-    stringsResult.push_back(tmp);
-  }
-  return stringsResult;
-
+  return raceResult;
 };
 
 double Race::getDistance() const {
