@@ -99,12 +99,10 @@ void registerTransports(Race& race, const std::vector<Transport*>& allTransport)
     else {
       std::cout << "Неверный номер.\n";
     }
-
-
   } while (action != 0);
 }
 
-bool checkRace(Race& race){
+bool checkRace(const Race& race){
 // Проверка возможности проведения гонки
   if (!race.canStart()) {
     std::cout << "Недостаточно участников для гонки. Попробуйте снова.\n";

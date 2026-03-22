@@ -26,25 +26,26 @@ int main()
     // Ввод дистанции
     distance = chooseDistance();
     Race race(distance, raceType);
-    
-    // Регистрация транспорта
-    registerTransports(race, allTransport);
 
-    // Проверка возможности проведения гонки
-    if (!race.canStart()) {
-      std::cout << "Недостаточно участников для гонки. Попробуйте снова.\n";
-      continue;
+    while (true) {
+      // Регистрация транспорта
+      registerTransports(race, allTransport);
+
+      // Проверка возможности проведения гонки
+      if (checkRace(race))
+        break;
+      else
+        continue;
     }
 
     race.start();
 
-
     std::cout << "Результаты гонки:\n";
     int index{ 1 };
-    
+
     std::vector<RaceResult> resultToPrint = race.getResult();
     for (const auto& oneTs : resultToPrint) {
-      std::cout << "\n" << index++ << ". " << oneTs.transportName 
+      std::cout << "\n" << index++ << ". " << oneTs.transportName
         << ". Время: " << oneTs.time;
     }
 
