@@ -15,7 +15,7 @@ double GndTransport::calcTime(int distance) const
   return time;
 }
 
-TRANSPORTRACE_API TransportType GndTransport::getType() const
+TransportType GndTransport::getType() const
 {
   return TransportType::GND;
 };

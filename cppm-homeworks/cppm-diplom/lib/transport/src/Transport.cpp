@@ -47,7 +47,7 @@ std::vector<Transport*> makeTransports() {
 }
 
 
-TRANSPORTRACE_API void freeTransports(std::vector<Transport*> transportsToFree){
+void freeTransports(std::vector<Transport*> transportsToFree){
   for (auto oneTransport : transportsToFree)
     delete oneTransport;  
 }
