@@ -1,13 +1,10 @@
-/**
+﻿/**
  * @file test.cpp
  * @brief Модульные тесты для гоночной системы
  *
  * Данный файл содержит тесты для проверки корректности работы
  * различных транспортных средств и логики гонок.
  */
-
-#include "pch.h"
-
 
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
@@ -20,6 +17,12 @@
 #include "Centaur.h"
 #include "BootsAllTerrain.h"
 #include "Race.h"
+
+
+//TEST_CASE("Another test") {
+//  int value = 42;
+//  CHECK(value == 42);
+//}
 
  /**
   * @brief Тест для класса Eagle (Орел)
@@ -134,7 +137,7 @@ TEST_CASE("Centaur time calculation") {
   int distance = 4500;
   double expectedTime = 374;
 
-   CHECK(expectedTime == doctest::Approx(centaur.calcTime(distance)));
+  CHECK(expectedTime == doctest::Approx(centaur.calcTime(distance)));
 }
 
 /**
@@ -169,7 +172,7 @@ TEST_CASE("Race getDistance test") {
  * @test Проверяет корректность получения типа гонки
  */
 TEST_CASE("Race getRaceType test") {
-  
+
   int distance = 4500;
   Race race(distance, RaceType::air);
 
