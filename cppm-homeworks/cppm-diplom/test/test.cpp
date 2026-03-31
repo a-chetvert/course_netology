@@ -18,12 +18,6 @@
 #include "BootsAllTerrain.h"
 #include "Race.h"
 
-
-//TEST_CASE("Another test") {
-//  int value = 42;
-//  CHECK(value == 42);
-//}
-
  /**
   * @brief Тест для класса Eagle (Орел)
   * @test Проверяет расчет времени для воздушного транспорта Eagle
