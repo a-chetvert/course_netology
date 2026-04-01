@@ -6,7 +6,7 @@ AirTransport::AirTransport(std::string name, int speed)
 {
 }
 
-double AirTransport::calcTime(int distance) const
+double AirTransport::calcTime(double distance) const
 {
   double time = distance * (1 - getDistanceReduction(distance)) / speed;
   return time;

@@ -5,7 +5,7 @@
 class  CarpetPlane :
     public AirTransport
 {
-  double getDistanceReduction(int distance) const override;
+  double getDistanceReduction(double distance) const override;
 public:
   TRANSPORTRACE_API CarpetPlane();
 };

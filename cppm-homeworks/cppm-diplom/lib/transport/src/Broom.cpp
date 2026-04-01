@@ -5,7 +5,7 @@ const char* NAME_BROOM_RU = "Метла";
 const int SPEED_BROOM = 20;
 const double REDUCTION_BROOM = 0.01;
 
-double Broom::getDistanceReduction(int distance) const
+double Broom::getDistanceReduction(double distance) const
 {
   return (distance / 1000) * reduction;
 }

@@ -6,10 +6,10 @@ class AirTransport :
   public Transport
 {
 protected:
-  TRANSPORTRACE_API virtual double getDistanceReduction(int distance) const = 0;
+  TRANSPORTRACE_API virtual double getDistanceReduction(double distance) const = 0;
 public:
   TRANSPORTRACE_API AirTransport(std::string name, int speed);
-  TRANSPORTRACE_API virtual double calcTime(int distance) const;
+  TRANSPORTRACE_API virtual double calcTime(double distance) const;
 
   TRANSPORTRACE_API TransportType getType() const override;
 };

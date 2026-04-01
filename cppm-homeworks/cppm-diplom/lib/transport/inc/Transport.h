@@ -29,7 +29,7 @@ public:
 	TRANSPORTRACE_API Transport(std::string name, int speed);
 	TRANSPORTRACE_API const std::string getName() const;
   TRANSPORTRACE_API virtual TransportType getType() const = 0;
-  TRANSPORTRACE_API virtual double calcTime(int distance) const = 0;
+  TRANSPORTRACE_API virtual double calcTime(double distance) const = 0;
 };
 
 TRANSPORTRACE_API std::vector<Transport*> makeTransports();

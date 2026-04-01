@@ -14,7 +14,7 @@ const double MEDIUM_DISTANCE_DISCOUNT = 0.03; // 3%
 const double LONG_DISTANCE_DISCOUNT = 0.10;   // 10%
 const double VERY_LONG_DISTANCE_DISCOUNT = 0.05; // 5%
 
-double CarpetPlane::getDistanceReduction(int distance) const
+double CarpetPlane::getDistanceReduction(double distance) const
 {
   if (distance < SHORT_DISTANCE_LIMIT) {
     return 0.0;

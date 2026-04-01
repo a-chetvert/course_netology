@@ -5,7 +5,7 @@ GndTransport::GndTransport(std::string name, int speed)
 {
 }
 
-double GndTransport::calcTime(int distance) const
+double GndTransport::calcTime(double distance) const
 {
   /// @brief время в пути без остановок
   double timeWithoutRest = static_cast<double>(distance) / speed; 

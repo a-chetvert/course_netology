@@ -9,7 +9,7 @@ protected:
   double reduction;
   // ASK здесь аргумент distance бесполезен
   // как лучше сделать?
-  double getDistanceReduction(int distance) const override;
+  double getDistanceReduction(double distance) const override;
 public:
   TRANSPORTRACE_API Eagle();
 };

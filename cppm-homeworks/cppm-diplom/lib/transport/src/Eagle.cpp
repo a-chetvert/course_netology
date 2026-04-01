@@ -4,7 +4,7 @@ const char* NAME_EAGLE_RU = "Орёл";
 const int  SPEED_EAGLE{ 8 };
 const double REDUCTION_EAGLE{ 0.06 };
 
-double Eagle::getDistanceReduction(int distance) const
+double Eagle::getDistanceReduction(double distance) const
 {
 	(void) distance;
 	return reduction;
