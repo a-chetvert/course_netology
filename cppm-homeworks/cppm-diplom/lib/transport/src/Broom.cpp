@@ -7,7 +7,7 @@ const double REDUCTION_BROOM = 0.01;
 
 double Broom::getDistanceReduction(double distance) const
 {
-  return (distance / 1000) * reduction;
+  return static_cast<int>(distance / 1000) * reduction;
 }
 
 Broom::Broom() : AirTransport(NAME_BROOM_RU, SPEED_BROOM)

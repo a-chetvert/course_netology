@@ -8,9 +8,13 @@ GndTransport::GndTransport(std::string name, int speed)
 double GndTransport::calcTime(double distance) const
 {
   /// @brief время в пути без остановок
-  double timeWithoutRest = static_cast<double>(distance) / speed; 
+  double timeWithoutRest = distance / speed; 
 
+  //int countRest = static_cast<int>(timeWithoutRest) / timeBeforeRest;
+  
   int countRest = static_cast<int>(timeWithoutRest) / timeBeforeRest;
+  if ((static_cast<int>(timeWithoutRest) % timeBeforeRest) == 0)
+      countRest--;
   double time = calcRestTime(countRest) + timeWithoutRest;
   return time;
 }
