@@ -6,8 +6,8 @@
 
 int main()
 {
-  RaceType raceType{ 0 };
-  double distance;
+  RaceType raceType{ RaceType::all };
+  double distance{0};
 
   // количество видов транспорта
   size_t totalTransports{ 0 };
