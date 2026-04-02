@@ -6,5 +6,4 @@
 #define TRANSPORTRACE_API __declspec(dllimport)
 #endif
 
-
 #include <iostream>

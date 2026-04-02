@@ -1,9 +1,6 @@
 ﻿cmake_minimum_required (VERSION 3.22)
 project ("transportLib")
 
-# TODO разобраться с этим!
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-
 set (SOURCES 
 src/AirTransport.cpp
 src/BootsAllTerrain.cpp
@@ -35,7 +32,13 @@ inc/Transport.h
 ) 
 
 # Создаем DLL (SHARED library)
-add_library(transportLib SHARED ${HEADERS} ${SOURCES})
+add_library(TRANSPORTRACE SHARED ${SOURCES} ${HEADERS})
 
-# TODO разобраться почему PUBLIC
-target_include_directories(transportLib PUBLIC inc)
+target_compile_definitions(TRANSPORTRACE PRIVATE TRANSPORTRACE_EXPORTS)
+
+target_include_directories(TRANSPORTRACE 
+    PUBLIC 
+        ${CMAKE_CURRENT_SOURCE_DIR}/inc
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+)

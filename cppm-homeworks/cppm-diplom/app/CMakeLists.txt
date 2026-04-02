@@ -1,5 +1,5 @@
-﻿cmake_minimum_required (VERSION 3.10)
-project ("raceTransport")
+﻿cmake_minimum_required (VERSION 3.22)
+project (app)
 
 set (SOURCES 
    main.cpp
@@ -10,6 +10,7 @@ set (HEADERS
   ConsoleUI.h
 )
 
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+add_executable(app ${SOURCES} ${HEADERS})
 
-add_executable(main ${SOURCES} ${HEADERS})
+# подключаем библиотеку
+target_link_libraries(app PRIVATE TRANSPORTRACE)

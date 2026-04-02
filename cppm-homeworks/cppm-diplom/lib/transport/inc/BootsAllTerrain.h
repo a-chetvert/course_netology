@@ -1,5 +1,7 @@
 #pragma once
 #include "GndTransport.h"
+#include "LibApi.h"
+
 class BootsAllTerrain :
     public GndTransport
 {

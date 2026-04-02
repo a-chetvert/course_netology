@@ -6,6 +6,8 @@
 
 int main()
 {
+  system("chcp 65001");
+
   RaceType raceType{ RaceType::all };
   double distance{0};
 
