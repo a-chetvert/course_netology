@@ -1,8 +1,17 @@
 /**
- * @brief Задача 1. Вывод изменяемого динамического массива
- * @note  https://github.com/netology-code/algocpp-homeworks/tree/main/4/01
+ * @brief Задача 2. Добавление в изменяемый динамический массив
+ * @note  https://github.com/netology-code/algocpp-homeworks/tree/main/4/02
  */
 #include <iostream>
+
+ /**
+  * @brief Структура динамического массива
+  */
+struct DynArr {
+  int actual_size{};
+  int logical_size{};
+  int* arr;
+};
 
 void print_dynamic_array(int* arr, int logical_size, int actual_size) {
   std::cout << "Динамический массив:";
@@ -14,14 +23,16 @@ void print_dynamic_array(int* arr, int logical_size, int actual_size) {
   }
 }
 
-/**
- * @brief Структура динамического массива
- */
-struct DynArr {
-  int actual_size{};
-  int logical_size{};
-  int* arr;
-};
+void append_to_dynamic_array(int var_to_app, int* arr, int logical_size, int actual_size) {
+  if (actual_size > logical_size) {
+    arr[logical_size++] = var_to_app;
+  }
+  else if (actual_size == logical_size) {
+    new int[actual_size * 2];
+
+  }
+}
+
 
 
 int main() {
