@@ -7,8 +7,10 @@
 #include <windows.h>
 #include <sstream>
 #include <vector>
+#include <cmath>
 
-int real_string_hash(const std::string& strToHash);
+bool isPrime(int n);
+int real_string_hash(const std::string& str_to_hash, int p_num, int module);
 std::string utf8To1251(const std::string& utf8Str);
 
 int main() {
@@ -18,17 +20,24 @@ int main() {
   int n{ 0 }; /// модуль
 
   std::string str;
+
   std::cout << utf8To1251("Введите p: ");
-  std::cin >> p;
+  while (true) {
+    std::cin >> p;
+    if (isPrime(p))
+      break;
+    else
+      std::cout << utf8To1251("Вы ввели составное число. \nВведите простое число p: ");
+  }
   std::cout << utf8To1251("Введите n: ");
   std::cin >> n;
+  std::cin.ignore();
 
   do {
     std::cout << utf8To1251("Введите строку: ");
-    std::cin.ignore();
     getline(std::cin, str);
-    std::cout << utf8To1251("Хэш строки ") << " " << " = ";
-    std::cout << str << " = " << real_string_hash(str) << "\n";
+    std::cout << utf8To1251("Хэш строки ");
+    std::cout << str << " = " << real_string_hash(str, p, n) << "\n";
   } while (str != "exit");
 
   return EXIT_SUCCESS;
@@ -36,15 +45,37 @@ int main() {
 
 /**
  * @brief рассчитывает хэш для строки с помощью серьёзного алгоритма
- * @param strToHash строка по которой вычисляется хэш
+ * @param str_to_hash  строка по которой вычисляется хэш
+ * @param p_num основание полинома
+ * @param module модуль для хэширования
  * @return хэш
  */
-int real_string_hash(const std::string& strToHash) {
-  int sum{ 0 };
-  for (int i = 0; i < strToHash.size(); i++) {
-    sum += static_cast<int>(strToHash[i]);
+int real_string_hash(const std::string& str_to_hash, int p_num, int module) {
+  uint64_t sum{ 0 };
+  uint64_t simple_in_power{ 1 };
+  for (int i = 0; i < str_to_hash.size(); i++) {
+    sum += (static_cast<int>(str_to_hash[i]) * simple_in_power) % module;
+    simple_in_power = (simple_in_power * p_num) % module;
+    sum %= module;
   }
-  return sum;
+  return static_cast<int>(sum);
+}
+
+/**
+ * @brief является ли число простым
+ * @param n число
+ * @return true == является
+ */
+bool isPrime(int n) {
+  if (n < 2) return false;
+  if (n == 2) return true;
+  if (n % 2 == 0) return false; //все чётные составные
+
+  int lim = static_cast<int>(std::sqrt(n));
+  for (int d = 3; d <= lim; d += 2) {
+    if (n % d == 0) return false;
+  }
+  return true;
 }
 
 /**
