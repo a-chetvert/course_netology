@@ -1,6 +1,6 @@
 /**
- * @brief Задача 2*. Обход в ширину
- * @note  https://github.com/netology-code/algocpp-homeworks/tree/main/7/02
+ * @brief Задача 3*. Поиск циклов
+ * @note  https://github.com/netology-code/algocpp-homeworks/tree/main/7/03
  */
 #include <iostream>
 #include <string>
@@ -22,23 +22,20 @@ void delArr(int**& arrToDel, int& sizeGraph);
 
 std::string utf8To1251(const std::string& utf8Str);
 
-void bfs(int**& graph, int startVertex, int*& visited, int sizeGraph) {
-  std::queue<int> queue;
-  startVertex--;
-  queue.push(startVertex);
-  visited[startVertex] = VISITED;
-  while (!queue.empty()) {
-    int vertex = queue.front();
-    std::cout << " " << queue.front() + 1 << " ";
-    queue.pop();
-    for (int k = 0; k < sizeGraph; k++) {
-      // если является смежной вершиной и не является посещённой
-      if (graph[vertex][k] == 1 && visited[k] == NOT_VISITED) {
-        queue.push(k);
-        visited[k] = VISITED;
+int dfs(int**& graph, int vertex, int*& visited, int sizeGraph, int prev) {
+  std::cout << " " << vertex + 1;
+  visited[vertex] = VISITED;
+  for (int i = 0; i < sizeGraph; i++)
+    // если является смежной вершиной
+    if (graph[vertex][i]) {
+      // если смежная вершина не посещалась
+      if (visited[i] == NOT_VISITED)
+        dfs(graph, i, visited, sizeGraph, vertex);
+      // вершина не равна предыдущей
+      else if (i != prev) {
+        return 1;
       }
     }
-  }
 }
 
 int main() {
@@ -48,7 +45,6 @@ int main() {
   int** graph{ nullptr }; ///указатель на граф в форме массива
   int* result{ nullptr }; ///для хранения данных о посещённых вершинах
   int index{ 0 };
-  int startIndex{ 0 };
 
   readFile(graph, dim);
 
@@ -57,18 +53,14 @@ int main() {
 #endif
 
   result = new int [dim] {0, };
-  std::cout << utf8To1251("В графе ") << dim;
-  std::cout << utf8To1251(" вершин. Введите номер вершины, с которой начнётся обход: ");
-  std::cin >> startIndex;
-  // пока условия не подходят под граф
-  while (startIndex < 1 || startIndex > dim) {
-    std::cout << utf8To1251("Вы ввели номер, который не входит в граф.\n");
-    std::cout << utf8To1251("Введите число от 1 до ") << dim << " ";
-    std::cin >> startIndex;
-  }
+
   std::cout << utf8To1251("Порядок обхода вершин:");
 
-  bfs(graph, startIndex, result, dim);
+  for (int i = 0; i < dim; i++) {
+    // если вершина не посещалась
+    if (result[i] == NOT_VISITED)
+      dfs(graph, i, result, dim, 0);
+  }
 
   delete[] result;
   delArr(graph, dim);
