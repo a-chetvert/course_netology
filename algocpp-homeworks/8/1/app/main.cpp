@@ -1,6 +1,6 @@
 /**
- * @brief Задача 3*. Поиск циклов
- * @note  https://github.com/netology-code/algocpp-homeworks/tree/main/7/03
+ * @brief Задача 1. Вывод орграфа на консоль
+ * @note  https://github.com/netology-code/algocpp-homeworks/tree/main/8/01
  */
 #include <iostream>
 #include <string>
@@ -8,7 +8,6 @@
 #include <sstream>
 #include <vector>
 #include <fstream>
-#include <queue>
 
  /// @brief макрос для отладки
  //#define DEBUG
@@ -18,37 +17,15 @@
 
 void readFile(int**& arr, int& sizeGraph);
 void printGraphArray(int** arr, int sizeGraph);
-void delArr(int**& arrToDel, int& sizeGraph);
+void delArr(int**& arrToDel, int sizeGraph);
 
 std::string utf8To1251(const std::string& utf8Str);
-
-int dfs(int**& graph, int vertex, int*& visited, int sizeGraph, int prev) {
-#ifdef DEBUG
-  std::cout << " " << vertex + 1;
-#endif
-  visited[vertex] = VISITED;
-  for (int i = 0; i < sizeGraph; i++) {
-    // если является смежной вершиной
-    if (graph[vertex][i]) {
-      // если смежная вершина не посещалась
-      if (visited[i] == NOT_VISITED)
-        dfs(graph, i, visited, sizeGraph, vertex);
-      // вершина не равна предыдущей
-      else if (i != prev) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
 
 int main() {
   SetConsoleCP(1251);
   SetConsoleOutputCP(1251);
   int dim{ 0 }; /// размер массива
   int** graph{ nullptr }; ///указатель на граф в форме массива
-  int* result{ nullptr }; ///для хранения данных о посещённых вершинах
-  int index{ 0 };
 
   readFile(graph, dim);
 
@@ -56,19 +33,22 @@ int main() {
   printGraphArray(graph, dim);
 #endif
 
-  result = new int [dim] {0, };
-
-  
+  std::cout << utf8To1251("Текстовый вид орграфа:\n");
+  // пока условия не подходят под граф
   for (int i = 0; i < dim; i++) {
-    // если вершина не посещалась
-    if (result[i] == NOT_VISITED)
-      if(dfs(graph, i, result, dim, 0))
-        std::cout << utf8To1251("В графе есть цикл!");
-      else
-        std::cout << utf8To1251("В графе нет циклов");
+    bool hasOut{ false };
+    std::cout<< "\n" << i + 1 << ":";
+    for (int j = 0; j < dim; j++) {
+      if (graph[i][j] == 1) {
+        hasOut = true;
+        std::cout << " " << j + 1;
+      }
+    }
+    if (!hasOut) {
+      std::cout << utf8To1251(" нет");
+    }
   }
-
-  delete[] result;
+  
   delArr(graph, dim);
 
   return EXIT_SUCCESS;
@@ -78,7 +58,7 @@ int main() {
  * @brief Выводит на экран содержимое двумерного массива типа int.
  *
  * @param[in] arr Указатель на двумерный массив для вывода.
- * @param[in] sizeArea Количество строк и столбцов в массиве.
+ * @param[in] sizeGraph Количество строк и столбцов в массиве.
  */
 void printGraphArray(int** arr, int sizeGraph) {
   for (int** p{ arr }; p < arr + sizeGraph; p++) {
@@ -148,7 +128,7 @@ void readFile(int**& arr, int& sizeGraph) {
  * @param arrToDel Указатель на двумерный массив для освобождения
  * @param sizeGraph размер массива для графа
  */
-void delArr(int**& arrToDel, int& sizeGraph) {
+void delArr(int**& arrToDel, int sizeGraph) {
   if (arrToDel != nullptr) {
     for (int i = 0; i < sizeGraph; i++) {
       delete[] arrToDel[i];
