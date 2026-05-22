@@ -1,6 +1,6 @@
 /**
- * @brief Задача 3*. Поиск циклов
- * @note  https://github.com/netology-code/algocpp-homeworks/tree/main/7/03
+ * @brief Задача 4*. Поиск компонентов связности
+ * @note  https://github.com/netology-code/algocpp-homeworks/tree/main/7/04
  */
 #include <iostream>
 #include <string>
@@ -8,10 +8,9 @@
 #include <sstream>
 #include <vector>
 #include <fstream>
-#include <queue>
 
  /// @brief макрос для отладки
- //#define DEBUG
+//#define DEBUG
 
 #define VISITED 1
 #define NOT_VISITED 0
@@ -22,21 +21,17 @@ void delArr(int**& arrToDel, int& sizeGraph);
 
 std::string utf8To1251(const std::string& utf8Str);
 
-int dfs(int**& graph, int vertex, int*& visited, int sizeGraph, int prev) {
+int dfs(int**& graph, int vertex, int*& cids, int sizeGraph, int cid) {
 #ifdef DEBUG
   std::cout << " " << vertex + 1;
 #endif
-  visited[vertex] = VISITED;
+  cids[vertex] = cid;
   for (int i = 0; i < sizeGraph; i++) {
     // если является смежной вершиной
     if (graph[vertex][i]) {
       // если смежная вершина не посещалась
-      if (visited[i] == NOT_VISITED)
-        dfs(graph, i, visited, sizeGraph, vertex);
-      // вершина не равна предыдущей
-      else if (i != prev) {
-        return true;
-      }
+      if (cids[i] == NOT_VISITED)
+        dfs(graph, i, cids, sizeGraph, cid);
     }
   }
   return false;
@@ -47,33 +42,37 @@ int main() {
   SetConsoleOutputCP(1251);
   int dim{ 0 }; /// размер массива
   int** graph{ nullptr }; ///указатель на граф в форме массива
-  int* result{ nullptr }; ///для хранения данных о посещённых вершинах
-
+  int* cids{ nullptr };   ///для хранения ответа
+  int cid{ 0 }; //номер компоненты связности
   readFile(graph, dim);
 
 #ifdef DEBUG
   printGraphArray(graph, dim);
 #endif
 
-  result = new int [dim] {0, };
-
-  bool hasCycle = false;
+  // массив, номер ячейки соответствует номеру вершины
+  // а значение - номеру связности
+  cids = new int [dim] {0, }; 
+  cid = 1; // начинаем маркировать с 1
 
   for (int i = 0; i < dim; i++) {
     // если вершина не посещалась
-    if (result[i] == NOT_VISITED)
-      if (dfs(graph, i, result, dim, -1)) { // prev == -1 (нет предыдущей)
-        hasCycle = true;
-        break;
-      }
+    if (cids[i] == NOT_VISITED) {
+      dfs(graph, i, cids, dim, cid);
+      cid++;
+    }
   }
 
-  if (hasCycle)
-    std::cout << utf8To1251("В графе есть цикл!");
-  else
-    std::cout << utf8To1251("В графе нет циклов");
+  std::cout << utf8To1251("Принадлежность вершин компонентам связности :\n");
 
-  delete[] result;
+  for (int i = 0; i < dim; i++) {
+    std::cout << i+1 << " - " << cids[i] << "\n";
+  }
+
+  std::cout << utf8To1251("Количество компонентов связности в графе: ") << cid - 1;
+
+
+  delete[] cids;
   delArr(graph, dim);
 
   return EXIT_SUCCESS;
@@ -83,7 +82,7 @@ int main() {
  * @brief Выводит на экран содержимое двумерного массива типа int.
  *
  * @param[in] arr Указатель на двумерный массив для вывода.
- * @param[in] sizeArea Количество строк и столбцов в массиве.
+ * @param[in] sizeGraph Количество строк и столбцов в массиве.
  */
 void printGraphArray(int** arr, int sizeGraph) {
   for (int** p{ arr }; p < arr + sizeGraph; p++) {
@@ -99,7 +98,7 @@ void printGraphArray(int** arr, int sizeGraph) {
  * и инициализирует его нулями
  *
  * @param[out] arr Ссылка на указатель, который будет установлен на созданный массив.
- * @param[in] sizeGraph Размер создаваемого массива
+ * @param[in] sizeArea Структура, содержащая размеры создаваемого массива.
  */
 void createArr(int**& arr, int sizeGraph) {
   arr = new int* [sizeGraph];
