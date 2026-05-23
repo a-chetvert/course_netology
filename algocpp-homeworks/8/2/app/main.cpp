@@ -1,6 +1,6 @@
 /**
- * @brief Задача 1. Вывод орграфа на консоль
- * @note  https://github.com/netology-code/algocpp-homeworks/tree/main/8/01
+ * @brief Задача 2.
+ * @note  https://github.com/netology-code/algocpp-homeworks/tree/main/8/02
  */
 #include <iostream>
 #include <string>
@@ -8,6 +8,7 @@
 #include <sstream>
 #include <vector>
 #include <fstream>
+#include <list>
 
  /// @brief макрос для отладки
  //#define DEBUG
@@ -21,34 +22,46 @@ void delArr(int**& arrToDel, int sizeGraph);
 
 std::string utf8To1251(const std::string& utf8Str);
 
+int dfs(int**& graph, int sizeGraph, int vertex, int* visited, std::list<int>& order) {
+  visited[vertex] = VISITED;
+  for (int i = 0; i < sizeGraph; i++)
+    if (graph[vertex][i])
+      if (visited[i] == NOT_VISITED)
+        dfs(graph, sizeGraph, i, visited, order);
+  order.push_front(vertex);
+  return false;
+}
+
 int main() {
   SetConsoleCP(1251);
   SetConsoleOutputCP(1251);
   int dim{ 0 }; /// размер массива
   int** graph{ nullptr }; ///указатель на граф в форме массива
+  int* visited{ nullptr };
 
   readFile(graph, dim);
+
+  std::list<int> order;
+  visited = new int[dim] {0, };
 
 #ifdef DEBUG
   printGraphArray(graph, dim);
 #endif
 
-  std::cout << utf8To1251("Текстовый вид орграфа:");
-  // пока условия не подходят под граф
+  std::cout << utf8To1251("Топологический порядок вершин:");
+
   for (int i = 0; i < dim; i++) {
-    bool hasOut{ false };
-    std::cout<< "\n" << i + 1 << ":";
-    for (int j = 0; j < dim; j++) {
-      if (graph[i][j] == 1) {
-        hasOut = true;
-        std::cout << " " << j + 1;
-      }
-    }
-    if (!hasOut) {
-      std::cout << utf8To1251(" нет");
+    //если вершина не посещалась
+    if (visited[i] == NOT_VISITED) {
+      dfs(graph, dim, i, visited, order);
     }
   }
-  
+
+  for (int i : order) {
+    std::cout << " ";
+    std::cout << i + 1;
+  }
+
   delArr(graph, dim);
 
   return EXIT_SUCCESS;
