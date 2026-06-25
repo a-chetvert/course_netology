@@ -1,33 +1,16 @@
 /**
- * @brief Задача 1
- * @note  
+ * @brief Задача 1. Проверка базовых функций двусвзяного списка
+ * @note  Источник: https://github.com/netology-code/cppl-homeworks/blob/main/04/01/
  */
 
 #include <iostream>
 
-//____________________________________
-
-
 //подключаем макросы catch2
 #include <catch2/catch_test_macros.hpp>
 
-#include <cstdint>
-
-//проверяемая функция
-uint32_t factorial(uint32_t number) {
-  return number <= 1 ? number : factorial(number - 1) * number;
-}
-
-//юнит-тест
-TEST_CASE("Factorials are computed", "[factorial]") {
-  REQUIRE(factorial(1) == 1);
-  REQUIRE(factorial(2) == 2);
-  REQUIRE(factorial(3) == 6);
-  REQUIRE(factorial(10) == 3'628'800);
-}
+#include <iostream>
 
 
-//____________________________________
 
 struct ListNode
 {
@@ -122,11 +105,30 @@ private:
   unsigned long m_size;
 };
 
-/*
-int main() {
 
-  std::cout << "Hello";
+//юнит-тест
+TEST_CASE("Проверка базовых функций двусвзяного списка") {
+  SECTION("Работа Empty()") {
+    List myList;
+    REQUIRE(myList.Empty() == true);
+    myList.PushBack(1);
+    REQUIRE(myList.Empty() == false);
+  }
 
-  return EXIT_SUCCESS;
+  SECTION("Работа Size().") {
+    List myList;
+    REQUIRE(myList.Size() == 0);
+    myList.PushBack(1);
+    REQUIRE(myList.Size() == 1);
+    myList.PushBack(1);
+    myList.PushBack(1);
+    REQUIRE(myList.Size() == 3);
+  }
+
+  SECTION("Работа Clear()") {
+    List myList;
+    myList.PushBack(1);
+    myList.Clear();
+    REQUIRE(myList.Size() == 0);
+  }
 }
-*/
