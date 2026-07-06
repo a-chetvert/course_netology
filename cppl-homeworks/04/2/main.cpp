@@ -3,11 +3,9 @@
  * @note  Источник: https://github.com/netology-code/cppl-homeworks/blob/main/04/02/
  */
 
+#include "catch2/catch_amalgamated.hpp"
+
 #include <iostream>
-
- //подключаем макросы catch2
-#include <catch2/catch_test_macros.hpp>
-
 #include <stdexcept>
 
 
@@ -126,6 +124,16 @@ TEST_CASE("PushFront()") {
 TEST_CASE("PopBack()") {
   List myList;
   REQUIRE_THROWS_AS(myList.PopBack(), std::runtime_error);
+}
+
+TEST_CASE("PopBack() 2") {
+  List myList;
+
+  REQUIRE_THROWS_MATCHES(
+    myList.PopBack(),
+    std::runtime_error,
+    Catch::Matchers::Message("list is empty")
+  );
 }
 
 TEST_CASE("PopFront()") {

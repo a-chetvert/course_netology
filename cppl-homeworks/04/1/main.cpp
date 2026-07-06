@@ -3,14 +3,9 @@
  * @note  Источник: https://github.com/netology-code/cppl-homeworks/blob/main/04/01/
  */
 
-#include <iostream>
-
-//подключаем макросы catch2
-#include <catch2/catch_test_macros.hpp>
+#include "catch2/catch_amalgamated.hpp"
 
 #include <iostream>
-
-
 
 struct ListNode
 {
@@ -131,4 +126,4 @@ TEST_CASE("Проверка базовых функций двусвзяного
     myList.Clear();
     REQUIRE(myList.Size() == 0);
   }
-}
+};
